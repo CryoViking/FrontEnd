@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Low Fidelity</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="common.js"></script>
+  
+  <style>
+    form.signals > div
+    {
+        margin: 10px 0;
+    }
+  
+    .form-group.parameters
+    {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .form-group.parameters input
+    {
+        max-width: 100px;
+    }
+    
+    .form-group.parameters select
+    {
+        max-width: 150px;
+    }
+    
+    form.signals .whiteNoise input:checked {
+        background-color: red;
+    }
+    
+  </style>
+</head>
+<body>
+  
+<!--Analyze compare modal-->
+<div class="modal fade" id="analyzeModal" tabindex="-1" role="dialog" aria-labelledby="analyzeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border: 1px solid #000; max-width: 1920px!important; max-width: unset!important;" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Analyze Comparison</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-sm-12" style="min-height: 300px;">
+                <div class="h-100 w-100 p-4" style="border: 1px solid #000;">
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="position-relative">
+                            <p class="mb-1">Perfect Signal</p> <span style="width: 100px; position: absolute; height: 1px; background-color: red; left: 150px; top: 25%;"></span>
+                            <p>Imperfect Signal</p> <span style="width: 100px; position: absolute; height: 1px; background-color: blue; left: 150px; bottom: 35%;"></span>
+                        </div>
+                        <div class="position-relative">
+                            <button onclick="merge()" class="btn btn-primary bg-white text-dark border-dark mr-2" style="font-size: 18px; font-weight: bold; width: 120px;">Merge</button>
+                            <button onclick="unmerge()" class="btn btn-primary bg-white text-dark border-dark ml-2" style="font-size: 18px; font-weight: bold; width: 120px;">Unmerge</button>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <img id="unmerge-img1" class="w-100 px-5" src="images/red-graph.jpg" />
+                        <img id="unmerge-img2" class="w-100 px-5" src="images/blue-graph.jpg" />
+                        <img id="merge-img" class="w-100 px-5 d-none" src="images/merge-graph.jpg" />
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="h-100 w-100 p-4" style="border: 1px solid #000;">
+                    <div style="white-space: nowrap;">
+                        <p>Perfect Signal</a>
+                    </div>
+                    <div>
+                        <div class="w-100 p-2" style="height: 150px; border: 1px solid #000;">
+                            <p>Statistics</p></div>
+                        </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="h-100 w-100 p-4" style="border: 1px solid #000;">
+                    <div style="white-space: nowrap;">
+                        <p>Imperfect Signal</a>
+                    </div>
+                    <div>
+                        <div class="w-100 p-2" style="height: 150px; border: 1px solid #000;">
+                            <p>Statistics</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<div class="container p-4 py-5 my-5" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border: 1px solid #000;">
+  <div class="row mb-5">
+    <div class="col-sm-4">
+      <h3>Analyzer</h3>
+    </div>
+    <div class="col-sm-8 text-right" style="cursor: pointer">
+      <h3>Settings <span><i class="fa fa-cogs"></i></span></h3>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-sm-6" style="min-height: 300px;">
+        <div class="h-100 w-100 p-4" style="border: 1px solid #000;">
+            <div class="text-center w-100 px-5 pt-4" style="white-space: nowrap;">
+                <a class="btn btn-primary bg-white text-dark border-dark w-100" style="font-size: 18px; font-weight: bold;" href="#">Perfect Signal File</a>
+                <p class="py-2">File Name: file required</p>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm-6" style="min-height: 300px;">
+        <div class="h-100 w-100 p-4" style="border: 1px solid #000;">
+            <div class="text-center w-100 px-5 pt-4" style="white-space: nowrap;">
+                <a class="btn btn-primary bg-white text-dark border-dark w-100" style="font-size: 18px; font-weight: bold;" href="#">Imperfect Signal File</a>
+                <p class="py-2">File Name: file required</p>
+            </div>
+            <div class="mt-5">
+                <p>S/N Ratio</p>
+                <div class="w-100" style="height: 150px; border: 1px solid #000;"></div>
+            </div>
+        </div>
+      </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-sm-12">
+        <div class="float-right" style="white-space: nowrap;">
+            <button type="button" class="btn btn-primary bg-dark text-white border-0" data-toggle="modal" data-target="#analyzeModal">
+              ANALYZE
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
