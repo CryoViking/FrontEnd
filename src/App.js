@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Generate from './components/Generate';
+import MainMenu from './components/MainMenu';
 
 class App extends React.Component {
     constructor() {
@@ -10,9 +10,9 @@ class App extends React.Component {
 
     render() {
         return (
-            <Generate>
+            <MainMenu>
 
-            </Generate>
+            </MainMenu>
         )
     }
 }

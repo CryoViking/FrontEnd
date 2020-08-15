@@ -36,3 +36,45 @@
     transform: rotate(360deg);
   }
 }
+
+form.signals > div {
+    margin: 10px 0;
+}
+
+.form-group.parameters {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .form-group.parameters input {
+        max-width: 100px;
+    }
+
+    .form-group.parameters select {
+        max-width: 150px;
+    }
+
+form.signals .whiteNoise input:checked {
+    background-color: red;
+}
+
+form.signals > div {
+    margin: 10px 0;
+}
+
+.form-group.parameters {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .form-group.parameters input {
+        max-width: 100px;
+    }
+
+    .form-group.parameters select {
+        max-width: 150px;
+    }
+
+form.signals .whiteNoise input:checked {
+    background-color: red;
+}
