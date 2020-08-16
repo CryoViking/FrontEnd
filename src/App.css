@@ -1,3 +1,7 @@
+/************/
+/***GLOBAL***/
+/************/
+
 .App {
   text-align: center;
 }
@@ -77,4 +81,44 @@ form.signals > div {
 
 form.signals .whiteNoise input:checked {
     background-color: red;
+}
+
+.btn-primary {
+    background-color: #D71D31;
+    color: #fff;
+}
+
+/**************/
+/***GENERATE***/
+/**************/
+
+/*Design_1
+#generate {
+    background-color: #000;
+}
+
+#signal-type, #delay-input, #sub-file, #file-format
+{
+    background-color: #ddd;
+}
+*/
+
+/*Design_2*/
+#generate {
+    background-image: url('./images/banner.jpg');
+    background-repeat: no-repeat;
+}
+
+.header {
+    background-color: #0384F0;
+    color: #fff;
+}
+
+#signal-type, #delay-input, #sub-file, #file-format {
+    background-color: #A8E6FF;
+    border-radius: 20px;
+}
+
+#generate .btn-primary.bg-dark {
+    background-color: #131FDE !important;
 }

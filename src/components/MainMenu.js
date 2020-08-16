@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../App.css';
 import '../Bootstrap.css';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import '../App.css';
+import { BrowserRouter as HashRouter, Switch, Route, NavLink } from 'react-router-dom';
 import Generate from './Generate';
 import Analyzer from './Analyzer';
 
@@ -12,7 +12,7 @@ export default class MainMenu extends Component {
 
     render() {
         return (
-            <Router>
+            <HashRouter>
                 <div className="container p-4 py-5" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', border: '1px solid #000' }}>
                     <div className="row mb-5">
                         <div className="col-sm-4">
@@ -27,7 +27,7 @@ export default class MainMenu extends Component {
                             <div className="h-100 w-100" style={{ border: '1px solid #000' }}>
                                 <div className="position-absolute text-center" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
                                     <h3 className="mb-4">SIGNAL GENERATION</h3>
-                                        <Link className="btn btn-primary bg-dark text-white border-0" to='/Generate'>GENERATE</Link>
+                                    <NavLink className="btn btn-primary bg-dark text-white border-0" to='/Generate'>GENERATE</NavLink>
                                     <p className="mt-4">Description Here</p>
                                 </div>
                             </div>
@@ -36,18 +36,20 @@ export default class MainMenu extends Component {
                             <div className="h-100 w-100" style={{ border: '1px solid #000' }}>
                                 <div className="position-absolute text-center" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
                                     <h3 className="mb-4">Title Here</h3>
-                                    <Link className="btn btn-primary bg-dark text-white border-0" to='/Analyzer'>ANALYSE</Link>
+                                    <NavLink className="btn btn-primary bg-dark text-white border-0" to='/Analyzer'>ANALYSE</NavLink>
                                     <p className="mt-4">Description Here</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Switch>
-                    <Route path="/Generate" component={Generate} />
-                    <Route path="/Analyzer" component={Analyzer} />
-                </Switch>
-            </Router>
+                <div className="row">
+                    <Switch>
+                        <Route path="/Generate" component={Generate} />
+                        <Route path="/Analyzer" component={Analyzer} />
+                    </Switch>
+                </div>
+            </HashRouter>
         );
     }
 }
