@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Low Fidelity</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="common.js"></script>
+  
+  <style>
+    form.signals > div
+    {
+        margin: 10px 0;
+    }
+  
+    .form-group.parameters
+    {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .form-group.parameters input
+    {
+        max-width: 100px;
+    }
+    
+    .form-group.parameters select
+    {
+        max-width: 150px;
+    }
+    
+    form.signals .whiteNoise input:checked {
+        background-color: red;
+    }
+    
+  </style>
+</head>
+<body>
+  
+<div class="container p-4 py-5 my-5" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border: 1px solid #000;">
+  <div class="row mb-5">
+    <div class="col-sm-4">
+      <h3>Signal Generation</h3>
+    </div>
+    <div class="col-sm-8 text-right" style="cursor: pointer">
+      <h3>Settings <span><i class="fa fa-cogs"></i></span></h3>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-sm-8" style="min-height: 300px;">
+        <div class="h-100 w-100 p-2" style="border: 1px solid #000;">
+            <div class="position-relative text-left">
+                <h4 class="mb-3">Signal Type</h4>
+                <div class="row no-gutters">
+                    <div class="col-sm-6">
+                        <form class="signals">
+                            <div class="form-check">
+                                <label class="form-check-label" for="radio1">
+                                    <input type="radio" class="form-check-input" id="radio1" name="optradio" value="whiteNoise" checked>Random Gaussian White Noise Signal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label" for="radio2">
+                                    <input type="radio" class="form-check-input" id="radio2" name="optradio" value="impulse">Impulse Signal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label" for="radio3">
+                                    <input type="radio" class="form-check-input" id="radio3" name="optradio" value="sinusoidal">Sinusoidal Wave
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6 p-2 h-100 position-relative" style="border: 1px solid #000;">
+                        <form class="whiteNoise">
+                            <div class="form-group parameters">
+                                <label for="magnitude">Noise Magnitude:</label>
+                                <input type="number" class="form-control" id="magnitude">
+                            </div>
+                        </form>
+                        <form class="impulse d-none">
+                            <div class="form-group parameters">
+                                <label for="duration">Wave Duration:</label>
+                                <input type="number" class="form-control" id="duration">
+                            </div>
+                            <div class="form-group parameters">
+                                <label for="amplification">Wave Amplification:</label>
+                                <input type="number" class="form-control" id="amplification">
+                            </div>
+                            <div class="form-group parameters">
+                                <label for="baseline">Wave Baseline:</label>
+                                <input type="number" class="form-control" id="baseline">
+                            </div>
+                        </form>
+                        <form class="sinusoidal d-none">
+                            <div class="form-group parameters">
+                                <label for="amplification">Wave Amplification (Sine):</label>
+                                <input type="number" class="form-control" id="amplification">
+                            </div>
+                            <div class="form-group parameters">
+                                <label for="phase">Wave Phase (Sine):</label>
+                                <input type="number" class="form-control" id="phase">
+                            </div>
+                            <div class="form-group parameters">
+                                <label for="frequency">Wave Frequency (Sine):</label>
+                                <input type="number" class="form-control" id="frequency">
+                            </div>
+                            <div class="form-group parameters">
+                                <label for="baseline">Wave Baseline:</label>
+                                <input type="number" class="form-control" id="baseline">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm-4" style="min-height: 300px;">
+        <div class="h-100 w-100" style="border: 1px solid #000;">
+            <div class="col-sm-12 position-relative p-0" style="height: 50%; border-bottom: 1px solid #000;">
+                <div class="position-absolute" style="left: 50%; top: 50%; transform: translate(-50%,-50%); white-space: nowrap;">
+                    <a class="btn btn-primary bg-dark text-white border-0" href="#">3D - Location Variables</a>
+                </div>
+            </div>
+            <div class="col-sm-12 position-relative p-0" style="height: 50%;">
+                <div class="position-absolute" style="left: 50%; top: 50%; transform: translate(-50%,-50%); white-space: nowrap;">
+                    <a class="btn btn-primary bg-dark text-white border-0" href="#">Delay Input File</a>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-sm-12" style="min-height: 250px;">
+        <div class="h-100 w-100 p-2" style="border: 1px solid #000;">
+            <div class="position-relative text-left">
+                <h4 class="mb-3">Sub File Parameters</h4>
+                <form class="sub-parameters" style="max-width: 400px">
+                    <div class="form-group parameters">
+                        <label class="mt-1" for="ratio">Signal / Noise Ratio:</label>
+                        <div class="d-flex">
+                            <input type="number" class="form-control" id="ratio">
+                            <span class="mx-2" style="font-size: 22px;">|</span>
+                            <input type="number" class="form-control" id="ratio">
+                        </div>
+                    </div>
+                    <div class="form-group parameters">
+                        <label class="mt-1" for="boundary">Delay Boundaries:</label>
+                        <input type="number" class="form-control" id="boundary">
+                    </div>
+                    <div class="form-group parameters">
+                        <label class="mt-1" for="dataBlock">Data Block Size:</label>
+                        <input type="number" class="form-control" id="dataBlock">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-sm-12">
+        <div class="h-100 w-100 p-2" style="border: 1px solid #000;">
+            <div class="position-relative text-left">
+                <h4 class="mb-3">File Formats</h4>
+                <form class="file-format" style="max-width: 400px">
+                    <div class="form-group parameters">
+                        <label class="mt-1" style="white-space: nowrap;" for="outputFormat">Output SubFile Format:</label>
+                        <select class="form-control" id="outputFormat">
+                          <option>Format A</option>
+                          <option>Format B</option>
+                          <option>Format C</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-sm-12">
+        <div class="float-right" style="white-space: nowrap;">
+            <a class="btn btn-primary bg-dark text-white border-0" href="#">GENERATE</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
