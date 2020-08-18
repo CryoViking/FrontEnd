@@ -88,6 +88,10 @@ form.signals .whiteNoise input:checked {
     color: #fff;
 }
 
+.modal-dialog {
+    max-width: 1000px!important;
+}
+
 /**************/
 /***GENERATE***/
 /**************/
