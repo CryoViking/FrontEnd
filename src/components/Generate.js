@@ -10,22 +10,19 @@ export default class Generate extends Component {
     render() {
         return (
             <div>
-                <div class="header px-4 pb-4 pt-5">
+                <div class="header px-4 py-4">
                     <div>
                         <div className="row">
-                            <div className="col-sm-4">
-                                <h3>Signal Generation</h3>
-                            </div>
-                            <div className="col-sm-8 text-right" style={{ cursor: 'pointer' }}>
-                                <h3>Settings <span><i className="fa fa-cogs" /></span></h3>
+                            <div className="text-center col-sm-12">
+                                <h2><strong>Signal Generation</strong></h2>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="generate" className="container p-4 py-4">
                     <div className="row">
-                        <div className="col-sm-9" style={{ minHeight: '200px' }}>
-                            <div id="signal-type" className="h-100 w-100 p-3" style={{ border: '1px solid #000' }}>
+                        <div className="col-sm-9" style={{ minHeight: '180px' }}>
+                            <div id="signal-type" className="h-100 w-100 p-3" style={{ border: '4px solid #fff' }}>
                                 <div className="position-relative text-left">
                                     <h4 className="mb-3">Signal Type</h4>
                                     <div className="row no-gutters">
@@ -93,7 +90,7 @@ export default class Generate extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3">
-                            <div id="delay-input" className="p-2 w-100" style={{ border: '1px solid #000' }}>
+                            <div id="delay-input" className="px-2 py-3 w-100" style={{ border: '4px solid #fff' }}>
                                 <div className="col-sm-12 position-relative p-2">
                                     <div className="position-relative" style={{ whiteSpace: 'nowrap' }}>
                                         <a className="btn btn-primary bg-dark text-white border-0 w-100" href="#">3D - Location Variables</a>
@@ -113,8 +110,8 @@ export default class Generate extends Component {
                         </div>
                     </div>
                     <div className="row mt-4">
-                        <div className="col-sm-12" style={{ minHeight: '250px' }}>
-                            <div id="sub-file" className="h-100 w-100 p-3" style={{ border: '1px solid #000' }}>
+                        <div className="col-sm-6" style={{ minHeight: '250px' }}>
+                            <div id="sub-file" className="h-100 w-100 p-3" style={{ border: '4px solid #fff' }}>
                                 <div className="position-relative text-left">
                                     <h4 className="mb-3">Sub File Parameters</h4>
                                     <form className="sub-parameters" style={{ maxWidth: '400px' }}>
@@ -138,10 +135,8 @@ export default class Generate extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="row mt-4">
-                        <div className="col-sm-12">
-                            <div id="file-format" className="h-100 w-100 p-3" style={{ border: '1px solid #000' }}>
+                        <div className="col-sm-6">
+                            <div id="file-format" className="h-100 w-100 p-3" style={{ border: '4px solid #fff' }}>
                                 <div className="position-relative text-left">
                                     <h4 className="mb-3">File Formats</h4>
                                     <form className="file-format" style={{ maxWidth: '400px' }}>
@@ -157,6 +152,8 @@ export default class Generate extends Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="row mt-4">
                     </div>
                     <div className="row mt-4">
                         <div className="col-sm-12">

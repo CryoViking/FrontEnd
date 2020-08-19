@@ -88,15 +88,15 @@ form.signals .whiteNoise input:checked {
     color: #fff;
 }
 
-.modal-dialog {
-    max-width: 1000px!important;
+#analyzeModal .modal-dialog {
+    max-width: 1000px !important;
 }
 
 /**************/
 /***GENERATE***/
 /**************/
 
-/*Design_1
+/*Design_1*/
 #generate {
     background-color: #000;
 }
@@ -105,9 +105,8 @@ form.signals .whiteNoise input:checked {
 {
     background-color: #ddd;
 }
-*/
 
-/*Design_2*/
+/*Design_2
 #generate {
     background-image: url('./images/banner.jpg');
     background-repeat: no-repeat;
@@ -126,3 +125,4 @@ form.signals .whiteNoise input:checked {
 #generate .btn-primary.bg-dark {
     background-color: #131FDE !important;
 }
+*/
