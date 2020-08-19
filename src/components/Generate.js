@@ -9,8 +9,8 @@ export default class Generate extends Component {
 
     render() {
         return (
-            <div className="container my-5 px-0" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', border: '1px solid #000' }}>
-                <div class="header px-4 py-4">
+            <div>
+                <div class="header px-4 pb-4 pt-5">
                     <div>
                         <div className="row">
                             <div className="col-sm-4">
