@@ -4,6 +4,7 @@ import './Bootstrap.css';
 import './App.css';
 import MainMenu from './components/MainMenu';
 import Generate from './components/Generate';
+import AppBar from "./components/AppBar";
 
 class App extends React.Component {
     constructor() {
@@ -12,9 +13,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <MainMenu>
-
-            </MainMenu>
+            <AppBar/>
         )
     }
 }
