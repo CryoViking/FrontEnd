@@ -5,10 +5,11 @@
  */
 
 //Standard Imports
+#include <argp.h>
+#include <float.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <argp.h>
-#include <stdbool.h>
 
 //Library Imports
 
@@ -25,8 +26,10 @@ static char args_doc[] = "N/A";
 
 static struct argp_option options[] = {
     {"random", 'r', 0, 0, "Generate delay file with random delays."},
-    {"3DModel", 'm', 0, 0, "Generate delay file based upon a 3D model, given coordinate file."},
-    {"coordfile", 'c', "FILE", 0, "Coordinate File to be passed"},
+    {"3DModel", 'm', 0, 0, "Generate delay file based upon a 3D model, given coordinate file, elevation and azimuth."},
+    {"coordfile", 'c', "FILE", 0, "Coordinate File to be used."},
+    {"elevation", 'e', "ELEVATION", 0, "Elevation value to be used."},
+    {"azimuth", 'a', "AZIMUTH", 0, "Azimuth to be used."},
 #ifdef DEBUG
     {"test", 't', 0, 0, "Run the test harness."},
 #endif
@@ -42,6 +45,8 @@ struct arguments {
     } mode;
     char* inputFile;
     char* outputFile;
+    double elevation;
+    double azimuth;
     bool test;
 };
 
@@ -72,6 +77,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
         case 'o':
             arguments->outputFile = arg;
             break;
+        case 'e':
+            arguments->elevation = strtod(arg, NULL);
+            break;
+        case 'a':
+            arguments->azimuth = strtod(arg, NULL);
+            break;
 #ifdef DEBUG
         case 't':
             arguments->test = true;
@@ -87,47 +98,73 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 
 static struct argp argp = { options, parse_opt, args_doc, doc };
 
-int main(int argc, char *argv[]){
-    struct arguments arguments;
-
-    arguments.mode = NOTSET;
-    arguments.inputFile = NULL;
-    arguments.outputFile = NULL;
-    arguments.test = false;
-
-    argp_parse(&argp, argc, argv, 0, 0, &arguments);
-
-    //printf ("OUTPUT_FILE = %s\n"
-    //        "Delay Type = %d\n",
-    //        arguments.inputFile,
-    //        arguments.mode
-    //        //(arguments.mode-1) ? "RANDOM" : "MODEL"
-    //        );
+void checkFlags(struct arguments arguments){
 #ifdef DEBUG
     if(arguments.test && arguments.outputFile == NULL){
         ARGUMENT_ERROR_STATE = true;
         ARGUMENT_ERROR_STATE_MESSAGE = "Must provide [-o] with File path argument when running program with [-t]\n";
     }
 
-    if(arguments.test && (arguments.mode != NOTSET || arguments.inputFile != NULL)){
+    if(arguments.test && (arguments.mode != NOTSET || arguments.inputFile != NULL
+                            || arguments.azimuth != DBL_MAX || arguments.elevation != DBL_MAX)){
         ARGUMENT_ERROR_STATE = true;
-        ARGUMENT_ERROR_STATE_MESSAGE = "Cannot run [-t] with [-r]|[-m] and [-c] provided at that same time\n";
+        ARGUMENT_ERROR_STATE_MESSAGE = "Must run [-t] with [-o] provided, provide NO other flags.\n";
     }
 #endif
+
+    if(arguments.mode == NOTSET){
+        ARGUMENT_ERROR_STATE = true;
+        ARGUMENT_ERROR_STATE_MESSAGE = "Provide a mode flag, either [-r] or [-m]\n";
+    }
 
     if(arguments.mode != MODEL && arguments.inputFile != NULL){
         ARGUMENT_ERROR_STATE = true;
         ARGUMENT_ERROR_STATE_MESSAGE = "Cannot use [-c] without [-m].\n";
     }
+
     if(arguments.mode == MODEL && arguments.inputFile == NULL){
         ARGUMENT_ERROR_STATE = true;
         ARGUMENT_ERROR_STATE_MESSAGE = "Must provide [-c] when using [-m] and must provide a file path to [-c].\n";
     }
 
+    if(arguments.mode == MODEL && (arguments.elevation == DBL_MAX || arguments.azimuth == DBL_MAX)){
+        ARGUMENT_ERROR_STATE = true;
+        ARGUMENT_ERROR_STATE_MESSAGE = "Must provide [-e] and [-a] when using [-m]\n";
+    }
+}
+
+
+int main(int argc, char *argv[]){
+    struct arguments arguments;
+
+    //Specifying default values for arguments struct.
+    arguments.mode = NOTSET;
+    arguments.elevation = DBL_MAX;
+    arguments.azimuth = DBL_MAX;
+    arguments.inputFile = NULL;
+    arguments.outputFile = NULL;
+    arguments.test = false;
+
+    argp_parse(&argp, argc, argv, 0, 0, &arguments);
+
+    //Make sure flag conditions are met.
+    checkFlags(arguments);
     if(ARGUMENT_ERROR_STATE){
         printf("%s", ARGUMENT_ERROR_STATE_MESSAGE);
         exit(0);
     }
 
+    //flag conditions met. Continue with program.
+    arguments.outputFile = (arguments.outputFile != NULL) ? arguments.outputFile : generateOutputFilename();
+    bool success = (arguments.mode == RANDOM)
+        ? generateRandomDelays(arguments.outputFile)
+        : generateModelledDelays(arguments.outputFile, arguments.inputFile,
+                                    arguments.elevation, arguments.azimuth);
+    if(success){
+        printf("Delay file has been successfully generated. Filename is: %s", arguments.outputFile);
+    }
+    else{
+        printf("Delay file failed to generate. See program logs."); //TODO: Logging features.
+    }
     return 0;
 }
