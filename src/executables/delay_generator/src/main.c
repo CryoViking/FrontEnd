@@ -27,6 +27,10 @@ static struct argp_option options[] = {
     {"random", 'r', 0, 0, "Generate delay file with random delays."},
     {"3DModel", 'm', 0, 0, "Generate delay file based upon a 3D model, given coordinate file."},
     {"coordfile", 'c', "FILE", 0, "Coordinate File to be passed"},
+#ifdef DEBUG
+    {"test", 't', 0, 0, "Run the test harness."},
+#endif
+    {"output", 'o', "FILE", 0, "Specify the output filename, otherwise uses default."},
     {0}
 };
 
@@ -37,6 +41,8 @@ struct arguments {
         MODEL
     } mode;
     char* inputFile;
+    char* outputFile;
+    bool test;
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state){
@@ -61,8 +67,16 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
             }
             break;
         case 'c':
-                arguments->inputFile = arg;
+            arguments->inputFile = arg;
             break;
+        case 'o':
+            arguments->outputFile = arg;
+            break;
+#ifdef DEBUG
+        case 't':
+            arguments->test = true;
+            break;
+#endif
         case ARGP_KEY_ARG:
             return 0;
         default:
@@ -78,6 +92,8 @@ int main(int argc, char *argv[]){
 
     arguments.mode = NOTSET;
     arguments.inputFile = NULL;
+    arguments.outputFile = NULL;
+    arguments.test = false;
 
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -87,6 +103,17 @@ int main(int argc, char *argv[]){
     //        arguments.mode
     //        //(arguments.mode-1) ? "RANDOM" : "MODEL"
     //        );
+#ifdef DEBUG
+    if(arguments.test && arguments.outputFile == NULL){
+        ARGUMENT_ERROR_STATE = true;
+        ARGUMENT_ERROR_STATE_MESSAGE = "Must provide [-o] with File path argument when running program with [-t]\n";
+    }
+
+    if(arguments.test && (arguments.mode != NOTSET || arguments.inputFile != NULL)){
+        ARGUMENT_ERROR_STATE = true;
+        ARGUMENT_ERROR_STATE_MESSAGE = "Cannot run [-t] with [-r]|[-m] and [-c] provided at that same time\n";
+    }
+#endif
 
     if(arguments.mode != MODEL && arguments.inputFile != NULL){
         ARGUMENT_ERROR_STATE = true;
