@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <confini.h>
 #include "subfile_generator.h"
 
 const int NUM_TILES = 256;
@@ -32,10 +34,11 @@ void write_example()
 }
 
 //load 256 csv delay file
-float* load_delay_file(char* filename)
+void load_delay_file(char *filename, float *delay)
 {
     int counter = 0;
-    float delay[NUM_TILES];
+    delay = (float *) malloc(NUM_TILES);
+
     FILE *fptr;
     int lineRes;
     fptr = fopen(filename, "r");
@@ -44,20 +47,64 @@ float* load_delay_file(char* filename)
         printf("Can't open the file!");
     }
 
-    do {
+    do
+    {
         lineRes = fscanf(fptr, "%f[^;\n]", &delay[counter]);
-        if(lineRes == 0)
+        if (lineRes == 0)
         {
             lineRes = fscanf(fptr, "%*c");
         }
         else
         {
-            printf("counter number %d: %f\n", counter,  delay[counter]);
+            printf("counter number %d: %f\n", counter, delay[counter]);
             counter = counter + 1;
         }
-    } while(lineRes != EOF && counter < NUM_TILES);
+    } while (lineRes != EOF && counter < NUM_TILES);
 
-    fclose(fptr); 
+    fclose(fptr);
 
-    return delay;
 }
+
+struct testDataType
+{
+    /* data */
+    char *key;
+    char *value;
+};
+
+//DISPATCH handler
+static int callback(IniDispatch *disp, void *v_other)
+{
+#define IS_KEY(KEY) \
+    (ini_string_match_ii(KEY, disp->data, disp->format))
+
+    if (disp->type != INI_KEY)
+    {
+        return 0;
+    }
+
+    if (IS_KEY("NOISE_MAGNITUDE")){
+        printf("Noise magnitude is:  %s \n", disp->value);
+    }else if(IS_KEY("SIGNAL_TYPE")){
+        printf("signal type is:  %s \n", disp->value);
+    }
+
+#undef IS_KEY
+
+    return 0;
+}
+
+void test_func()
+{
+    if (load_ini_path("example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL))
+    {
+        printf("error, something went wrongat load path");
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+    test_func();
+    return 0;
+}
+
