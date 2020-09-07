@@ -4,14 +4,14 @@
 
 # Compiler settings - Can be customized.
 CC = gcc
-CXXFLAGS = -std=c11 -Wall -d
+CXXFLAGS = -std=c11 -Wall -lconfini
 LDFLAGS = 
 
 # Makefile settings - Can be customized.
-APPNAME = subfile_generator.c
+APPNAME = subfile_generator
 EXT = .c
 SRCDIR = src/executables/subfile_generator
-OBJDIR = subfile_generator
+OBJDIR = src/executables/subfile_generator/out
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))

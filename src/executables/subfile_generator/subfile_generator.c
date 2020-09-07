@@ -65,13 +65,6 @@ void load_delay_file(char *filename, float *delay)
 
 }
 
-struct testDataType
-{
-    /* data */
-    char *key;
-    char *value;
-};
-
 //DISPATCH handler
 static int callback(IniDispatch *disp, void *v_other)
 {
@@ -94,7 +87,7 @@ static int callback(IniDispatch *disp, void *v_other)
     return 0;
 }
 
-void test_func()
+void load_confini()
 {
     if (load_ini_path("example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL))
     {
@@ -104,7 +97,7 @@ void test_func()
 
 int main(int argc, char const *argv[])
 {
-    test_func();
+    load_confini();
     return 0;
 }
 
