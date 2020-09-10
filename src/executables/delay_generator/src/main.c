@@ -47,7 +47,9 @@ struct arguments {
     char* outputFile;
     double elevation;
     double azimuth;
+#ifdef DEBUG
     bool test;
+#endif
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state){
@@ -143,15 +145,17 @@ int main(int argc, char *argv[]){
     arguments.azimuth = DBL_MAX;
     arguments.inputFile = NULL;
     arguments.outputFile = NULL;
+#ifdef DEBUG
     arguments.test = false;
+#endif
 
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
     //Make sure flag conditions are met.
     checkFlags(arguments);
     if(ARGUMENT_ERROR_STATE){
-        printf("%s", ARGUMENT_ERROR_STATE_MESSAGE);
-        exit(0);
+        fprintf(stderr, "%s", ARGUMENT_ERROR_STATE_MESSAGE);
+        exit(EXIT_FAILURE);//Error occured in flags, end program with failure.
     }
 
     //flag conditions met. Continue with program.
@@ -161,10 +165,11 @@ int main(int argc, char *argv[]){
         : generateModelledDelays(arguments.outputFile, arguments.inputFile,
                                     arguments.elevation, arguments.azimuth);
     if(success){
-        printf("Delay file has been successfully generated. Filename is: %s", arguments.outputFile);
+        fprintf(stdout, "File successfully written: %s", arguments.outputFile);
+        return EXIT_SUCCESS;//Program succeeded, finish with success.
     }
     else{
-        printf("Delay file failed to generate. See program logs."); //TODO: Logging features.
+        fprintf(stderr, "Failed to perform IO operations on file."); //TODO: Logging features.
+        return EXIT_FAILURE;//Program failed, exit with code 1.
     }
-    return 0;
 }

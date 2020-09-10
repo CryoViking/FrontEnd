@@ -2,14 +2,16 @@
  * Author: Nathan van der Velde
  * Date Created: 2020-09-03
  * GitHub: CryosisOS
+ * StudentID: 19127600
  */
 
 
 //Standard Imports
-#include <regex.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 //Library Imports
 
@@ -56,6 +58,23 @@ coord** parseCoordFile(char* filename){
 float* calcDelay(coord** coordinates, double elevation, double azimuth){
     float delays[NUM_TILES];
     return delays;
+}
+
+char* generateOutputFilename(){
+    time_t t;
+    struct tm* tm;
+    char date_arr[11], time_arr[11];
+
+    //Get time
+    time(&t);
+    tm = localtime(&t);
+    strftime(date_arr, sizeof(date_arr), "%Y:%m:%d", tm);
+    strftime(time_arr, sizeof(time_arr), "%I:%M:%S", tm);
+    //Format string
+    const char* filename;
+    strcat(filename, date_arr); strcat(filename, "-"); strcat(filename, time_arr);
+    strcat(filename, "_delays.csv");
+    return filename;
 }
 
 bool generateRandomDelays(char* outputFilename){
