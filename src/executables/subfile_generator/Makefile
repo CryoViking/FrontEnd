@@ -5,12 +5,12 @@
 # Compiler settings - Can be customized.
 CC = gcc
 CXXFLAGS = -std=c11 -Wall -lconfini
-LDFLAGS = 
+LDFLAGS =
 
 # Makefile settings - Can be customized.
 APPNAME = subfile_generator
 EXT = .c
-SRCDIR = src/executables/subfile_generator
+SRCDIR = src/executables/subfile_generator/src
 OBJDIR = src/executables/subfile_generator/out
 
 ############## Do not change anything from here downwards! #############
