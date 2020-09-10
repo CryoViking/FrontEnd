@@ -110,43 +110,28 @@ export default class Generate extends Component {
                         </div>
                     </div>
                     <div className="row mt-4">
-                        <div className="col-sm-6" style={{ minHeight: '250px' }}>
+                        <div className="col-sm-12" style={{ minHeight: '150px' }}>
                             <div id="sub-file" className="h-100 w-100 p-3" style={{ border: '4px solid #fff' }}>
                                 <div className="position-relative text-left">
                                     <h4 className="mb-3">Sub File Parameters</h4>
-                                    <form className="sub-parameters" style={{ maxWidth: '400px' }}>
+                                    <form className="sub-parameters">
                                         <div className="form-group parameters">
                                             <label className="mt-1" htmlFor="ratio">Signal / Noise Ratio:</label>
                                             <div className="d-flex">
                                                 <input type="number" className="form-control" id="ratio" />
-                                                <span className="mx-2" style={{ fontSize: '22px' }}>|</span>
-                                                <input type="number" className="form-control" id="ratio" />
                                             </div>
                                         </div>
                                         <div className="form-group parameters">
-                                            <label className="mt-1" htmlFor="boundary">Delay Boundaries:</label>
-                                            <input type="number" className="form-control" id="boundary" />
-                                        </div>
-                                        <div className="form-group parameters">
-                                            <label className="mt-1" htmlFor="dataBlock">Data Block Size:</label>
+                                            <label className="mt-1" htmlFor="dataBlock">Time Samples Per Block:</label>
                                             <input type="number" className="form-control" id="dataBlock" />
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-6">
-                            <div id="file-format" className="h-100 w-100 p-3" style={{ border: '4px solid #fff' }}>
-                                <div className="position-relative text-left">
-                                    <h4 className="mb-3">File Formats</h4>
-                                    <form className="file-format" style={{ maxWidth: '400px' }}>
                                         <div className="form-group parameters">
-                                            <label className="mt-1" style={{ whiteSpace: 'nowrap' }} htmlFor="outputFormat">Output SubFile Format:</label>
-                                            <select className="form-control" id="outputFormat">
-                                                <option>Format A</option>
-                                                <option>Format B</option>
-                                                <option>Format C</option>
-                                            </select>
+                                            <label className="mt-1" htmlFor="dataBlock">Number of Blocks Per Sub File:</label>
+                                            <input type="number" className="form-control" id="dataBlock" />
+                                        </div>
+                                        <div className="form-group parameters">
+                                            <label className="mt-1" htmlFor="dataBlock">Number of Signal Paths:</label>
+                                            <input type="number" className="form-control" id="dataBlock" />
                                         </div>
                                     </form>
                                 </div>

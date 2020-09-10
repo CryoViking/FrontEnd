@@ -42,7 +42,7 @@ export default class MainMenu extends Component {
                         <Route exact path="/" render={() => (
                                 <div className="row mt-5">
                                     <div className="col-sm-6" style={{ minHeight: '500px' }}>
-                                        <div className="h-100 w-100" style={{ border: '1px solid #000' }}>
+                                        <div className="h-100 w-100" style={{ border: '4px solid #000' }}>
                                             <div className="position-absolute text-center" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
                                                 <h3 className="mb-4">SIGNAL GENERATION</h3>
                                                 <NavLink className="btn btn-primary bg-dark text-white border-0" to='/Generate'>GENERATE</NavLink>
@@ -51,7 +51,7 @@ export default class MainMenu extends Component {
                                         </div>
                                     </div>
                                     <div className="col-sm-6" style={{ minHeight: '500px' }}>
-                                        <div className="h-100 w-100" style={{ border: '1px solid #000' }}>
+                                        <div className="h-100 w-100" style={{ border: '4px solid #000' }}>
                                             <div className="position-absolute text-center" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
                                                 <h3 className="mb-4">Title Here</h3>
                                                 <NavLink className="btn btn-primary bg-dark text-white border-0" to='/Analyzer'>ANALYSE</NavLink>

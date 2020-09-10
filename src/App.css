@@ -97,12 +97,37 @@ form.signals .whiteNoise input:checked {
 /**************/
 
 /*Design_1*/
-#generate {
+#generate, #analyzer {
     background-color: #000;
 }
 
-#signal-type, #delay-input, #sub-file, #file-format
+#signal-type, #delay-input, #sub-file, #file-format, #perfect-signal, #imperfect-signal, #perfect-stat, #imperfect-stat, #graph-signal
 {
+    background-color: #ddd;
+}
+
+.sub-parameters
+{
+    display: flex;
+    flex-flow: wrap;
+}
+
+.sub-parameters > .form-group.parameters:nth-child(2n+1)
+{
+    padding-right: 90px;
+}
+
+.sub-parameters > .form-group.parameters:nth-child(2n)
+{
+    padding-left: 90px;
+}
+
+#sub-file .form-group.parameters
+{
+    width: 50%;
+}
+
+.modal-content {
     background-color: #ddd;
 }
 
