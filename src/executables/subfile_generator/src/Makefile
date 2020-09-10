@@ -32,7 +32,7 @@ all: $(APPNAME)
 
 # Builds the app
 $(APPNAME): $(OBJ)
-	$(CC)  -o $@ $^ subfile_generator.c $(CXXFLAGS)
+	$(CC)  -o $@ $^ subfile_generator.c subfile_generator.h $(CXXFLAGS)
 
 # Creates the dependecy rules
 %.d: $(SRCDIR)/%$(EXT)
