@@ -33,9 +33,9 @@ float getSignal(struct signal_generator signalGen ,float time){
         //give condition for finite impulse response
         //with brief input ex: [0,0,1,0,0,1,0,0]
         if((fmod(time,signalGen.duration)) == 0.0)//impulse every (duration)
-            value = 1.0;
+            value = signalGen.amplitude;
         else
-            value = 0.0;
+            value = 0.0; //baseline
         break;
     case 2: //gaussian signal
 
@@ -48,11 +48,26 @@ float getSignal(struct signal_generator signalGen ,float time){
     return (value * signalGen.amplitude);
 }
 
+//uniform random nubmer generator in range [0,1]
+float ranu(long* iseed){
+    //iseed = 7^5 * (iseed % (m/a)) - (m%a) * (iseed/ (m/a))
+    //update seed
+    *iseed = 16807 * (*iseed % 127773) - 2836 * (*iseed / 127773); 
+    if(*iseed < 0){
+        *iseed += 2147483647;
+    }
+    return (float) *iseed/ 2147483647.0;
+}
+
+float add_noise(float signal, float noise){
+    return signal + noise;
+}
+
 //testing purpose
 int main(int argc, char const *argv[])
 {
     struct signal_generator generator;
-    generator.signalType = 0; 
+    generator.signalType = 0; //choose type 
     generator.phase = 0;
     generator.frequency = 20; 
     generator.amplitude = 1;
@@ -61,14 +76,23 @@ int main(int argc, char const *argv[])
 
     time_t start = time(NULL);
 
-    
+    long iseed = 123456;
+    float noise[100]; //example noise container
+
+    //generate signal
     for (int i = 0; i < 100; i++)
     {
         printf("type anything to continue\n");
         getchar();
         time_t end = time(NULL);
-        printf("%f ", getSignal(generator, difftime(end, start))); 
+        printf("perfect signal %f ", getSignal(generator, difftime(end, start)));
+        //generate noise and add noise to signal 
+        noise[i] = ranu(&iseed);
+        float noise_and_signal = add_noise(getSignal(generator, difftime(end, start)), noise[i]);
+        printf("signal after add noise %f ", noise_and_signal);
+
     }
+
     return 0;
 }
 

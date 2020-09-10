@@ -76,6 +76,7 @@ static int callback(IniDispatch *disp, void *v_other)
         return 0;
     }
 
+    //key match and parse value.
     if (IS_KEY("NOISE_MAGNITUDE")){
         printf("Noise magnitude is:  %s \n", disp->value);
     }else if(IS_KEY("SIGNAL_TYPE")){
