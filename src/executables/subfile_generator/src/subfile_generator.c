@@ -19,10 +19,10 @@ void write_example(){
     for (size_t i = 0; i < 256; i++){
         numbers_example[i] = i + 0.5;
         if (i == 255){
-            fprintf(fptr, "%f", numbers_example[i]); //write to file
+            fprintf(fptr, "%f", numbers_example[i]);
         }
         else{
-            fprintf(fptr, "%f,", numbers_example[i]); //write to file
+            fprintf(fptr, "%f,", numbers_example[i]); 
         }
     }
     fclose(fptr);
@@ -69,6 +69,22 @@ static int callback(IniDispatch *disp, void *v_other){
         printf("Noise magnitude is:  %s \n", disp->value);
     }else if(IS_KEY("SIGNAL_TYPE")){
         printf("signal type is:  %s \n", disp->value);
+    }else if(IS_KEY("SINE_AMPLIFICATION")){
+        printf("sine amplification is:  %s \n", disp->value);
+    }else if(IS_KEY("SINE_PHASE")){
+        printf("sine phase is:  %s \n", disp->value);
+    }else if(IS_KEY("SINE_FREQUENCY")){
+        printf("sine frequency is:  %s \n", disp->value);
+    }else if(IS_KEY("SINE_BASELINE")){
+        printf("sine baseline is:  %s \n", disp->value);
+    }else if(IS_KEY("IMP_DURATION")){
+        printf("impulse duration is:  %s \n", disp->value);
+    }else if(IS_KEY("IMP_AMPLIFICATION")){
+        printf("impulse amplification type is:  %s \n", disp->value);
+    }else if(IS_KEY("IMP_BASELINE")){
+        printf("impulse baseline is:  %s \n", disp->value);
+    }else if(IS_KEY("RWGN_MAGNITUDE")){
+        printf("noise magnitude is:  %s \n", disp->value);
     }
 
 #undef IS_KEY
@@ -77,7 +93,7 @@ static int callback(IniDispatch *disp, void *v_other){
 }
 
 void load_confini(){
-    if (load_ini_path("example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL)){
+    if (load_ini_path("../example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL)){
         fprintf(stderr, "");
     }
 }
