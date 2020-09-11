@@ -1,0 +1,8 @@
+#Noise Data
+NOISE_MAGNITUDE=1
+#Signal Data
+# 0 = Random White Gaussian Noise | 1 = Impulse Wave | 2 = Sine Wave
+SIGNAL_TYPE=0
+RWGN_MAGNITUDE=1
+etc
+etc
