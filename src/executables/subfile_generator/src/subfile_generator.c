@@ -4,7 +4,7 @@
 #include <confini.h>
 #include "subfile_generator.h"
 
-const int NUM_TILES = 256;
+static const int NUM_TILES = 256;
 
 void write_example(){
     float numbers_example[256];
@@ -94,7 +94,7 @@ static int callback(IniDispatch *disp, void *v_other){
 
 void load_confini(){
     if (load_ini_path("../example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL)){
-        fprintf(stderr, "");
+        fprintf(stderr, "could not load ini file.");
     }
 }
 

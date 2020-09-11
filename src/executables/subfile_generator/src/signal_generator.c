@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include "libs/frannor.h"
@@ -77,8 +78,9 @@ float add_noise(float signal, float noise){
 
 float* generateBlockRow(){
     for(int ii = 0; ii <= 40; ii++){
-        
+
     }
+    return NULL;
 }
 
 //testing purpose
