@@ -2,10 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\images",
     "\\src",
     "\\src\\components"
   ],
-  "SelectedNode": "\\public\\index.html",
+  "SelectedNode": "\\src\\components\\Graph.js",
   "PreviewInSolutionExplorer": false
 }

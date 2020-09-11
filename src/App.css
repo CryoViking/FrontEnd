@@ -88,22 +88,50 @@ form.signals .whiteNoise input:checked {
     color: #fff;
 }
 
+#analyzeModal .modal-dialog {
+    max-width: 1000px !important;
+}
+
 /**************/
 /***GENERATE***/
 /**************/
 
-/*Design_1
-#generate {
+/*Design_1*/
+#generate, #analyzer {
     background-color: #000;
 }
 
-#signal-type, #delay-input, #sub-file, #file-format
+#signal-type, #delay-input, #sub-file, #file-format, #perfect-signal, #imperfect-signal, #perfect-stat, #imperfect-stat, #graph-signal
 {
     background-color: #ddd;
 }
-*/
 
-/*Design_2*/
+.sub-parameters
+{
+    display: flex;
+    flex-flow: wrap;
+}
+
+.sub-parameters > .form-group.parameters:nth-child(2n+1)
+{
+    padding-right: 90px;
+}
+
+.sub-parameters > .form-group.parameters:nth-child(2n)
+{
+    padding-left: 90px;
+}
+
+#sub-file .form-group.parameters
+{
+    width: 50%;
+}
+
+.modal-content {
+    background-color: #ddd;
+}
+
+/*Design_2
 #generate {
     background-image: url('./images/banner.jpg');
     background-repeat: no-repeat;
@@ -122,3 +150,4 @@ form.signals .whiteNoise input:checked {
 #generate .btn-primary.bg-dark {
     background-color: #131FDE !important;
 }
+*/
