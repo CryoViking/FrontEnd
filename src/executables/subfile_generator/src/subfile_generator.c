@@ -22,7 +22,7 @@ void write_example(){
             fprintf(fptr, "%f", numbers_example[i]);
         }
         else{
-            fprintf(fptr, "%f,", numbers_example[i]); 
+            fprintf(fptr, "%f,", numbers_example[i]);
         }
     }
     fclose(fptr);

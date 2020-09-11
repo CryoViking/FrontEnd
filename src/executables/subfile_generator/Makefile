@@ -5,7 +5,7 @@
 # Compiler settings - Can be customized.
 CC = gcc
 CXXFLAGS = -Wall -lm
-LDFLAGS = 
+LDFLAGS =
 
 # Makefile settings - Can be customized.
 APPNAME = subfile_generator
