@@ -18,10 +18,6 @@
 //Local Imports
 #include "delay_generator.h"
 
-char* generateOutputFilename(){
-    return "";
-}
-
 const int NUM_TILES = 256;
 
 typedef struct {
@@ -99,7 +95,7 @@ bool generateRandomDelays(char* outputFilename){
 }
 
 bool generateModelledDelays(char* outputFilename, char* coordinateFile, double elevation, double azimuth){
-    coord* coordinates = parseCoordFile(coordinateFile);
+    coord** coordinates = parseCoordFile(coordinateFile);
     if(coordinates == NULL){
         return false;
     }
