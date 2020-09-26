@@ -7,6 +7,17 @@ GitHub: CryosisOS
 import numpy as np
 import scipy.interpolate
 import matplotlib.pyplot as plt
+from scipy import signal
+from scipy.fftpack import fft, fftshift
+import matplotlib.pyplot as plt
+import numpy as np # to work with numerical data efficiently
+
+window = signal.gaussian(1000, std=40)
+samples = np.random.choice(window, 8002)
+
+plt.stem(np.arange(8002),samples, 'r', )
+plt.plot(np.arange(8002),samples)
+
 
 def getSineArray():
     xarr = np.arange(0, 10, 0.1)
