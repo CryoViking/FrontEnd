@@ -165,11 +165,11 @@ int main(int argc, char *argv[]){
         : generateModelledDelays(arguments.outputFile, arguments.inputFile,
                                     arguments.elevation, arguments.azimuth);
     if(success){
-        fprintf(stdout, "File successfully written: %s", arguments.outputFile);
+        fprintf(stdout, "File successfully written: %s\n", arguments.outputFile);
         return EXIT_SUCCESS;//Program succeeded, finish with success.
     }
     else{
-        fprintf(stderr, "Failed to perform IO operations on file."); //TODO: Logging features.
+        fprintf(stderr, "Failed to perform IO operations on file.\n"); //TODO: Logging features.
         return EXIT_FAILURE;//Program failed, exit with code 1.
     }
 }
