@@ -40,4 +40,4 @@ $(OBJDIR)delay_generator.o: ./src/delay_generator.c ./src/delay_generator.h
 	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 clean:
-	$(RM) $(wildcard ./obj/*.o ./obj/libs/*.o ./build/)
+	$(RM) $(wildcard ./obj/*.o ./obj/libs/*.o ./build/*)

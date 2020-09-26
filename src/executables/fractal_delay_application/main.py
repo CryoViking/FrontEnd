@@ -5,57 +5,100 @@ GitHub: CryosisOS
 """
 
 import numpy as np
+from numpy.random import seed
+from numpy.random import randn
+import random
 import scipy.interpolate
+from scipy import signal as sig
 import matplotlib.pyplot as plt
-from scipy import signal
-from scipy.fftpack import fft, fftshift
-import matplotlib.pyplot as plt
-import numpy as np # to work with numerical data efficiently
-
-window = signal.gaussian(1000, std=40)
-samples = np.random.choice(window, 8002)
-
-plt.stem(np.arange(8002),samples, 'r', )
-plt.plot(np.arange(8002),samples)
+import csv
+import os
 
 
-def getSineArray():
-    xarr = np.arange(0, 10, 0.1)
-    yarr = np.sin(xarr)
-    return xarr, yarr
+def resample(signal, sample_size, original_sample_size):
+    return sig.resample(signal, sample_size), np.linspace(0, original_sample_size, sample_size)
 
-x_parabola, y_parabola = getSineArray()
 
-plt.figure()
-u = plt.plot(x_parabola,y_parabola,'ro') # plot the points)
-t = np.linspace(0, len(x_parabola), len(x_parabola)*1000) # parameter t to parametrize x and y
-pxLagrange = scipy.interpolate.lagrange(t, x_parabola) # X(T)
-pyLagrange = scipy.interpolate.lagrange(t, y_parabola) # Y(T)
-n = 50
-ts = np.linspace(t[0],t[-1],n)
-xLagrange = pxLagrange(ts) # lagrange x coordinates
-yLagrange = pyLagrange(ts) # lagrange y coordinates
-plt.plot(xLagrange, yLagrange,'b-',label = "Polynomial")
-plt.show()
+def generate_gauss(sample_size, magnitude=127):
+    seed(1)
+    wave = [random.gauss(0, magnitude/3) for i in range(sample_size)]
+    for i in wave:
+        if i > 127:
+            i = 127.0
+        if i < -127:
+            i = -127.0
+    return wave
 
-#for y in yLagrange:
-#    print(y)
+def generate_impulse(duration, baseline, sample_size, amplitude=127):
+    pass
+
+def generate_sine(phase, frequency, baseline, sample_size, amplitude=127):
+    pass
+
+def read_delay_file(filename="delays.csv"):
+    delays = []
+    # delay file must be one row
+    with open(filename) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            delays = row
+    return delays
+
+def apply_delay(signal, delay):
+    def nextpow2(i):
+      n = 1
+      while n < i: n *= 2
+      return n
+
+    Nin = len(signal)
+    N = nextpow2(Nin +np.max(np.abs(delay)))
+    fdatin = np.fft.fft(signal, N)
+    ik = np.array([2j*np.pi*k for k in np.arange(0, N)]) / N
+    fshift = np.exp(-ik*delay)
+    datout = np.real(np.fft.ifft(fshift * fdatin))
+    datout = datout[0:Nin]
+    return datout
+
+def splice_signal(signal, step):
+    return signal[0::step]
+
+def reset_output_file(filename):
+    try:
+        os.remove(filename)
+    except OSError:
+        pass
+
+def write_signal(signal, filename):
+    print(len(signal))
+    with open(filename, "a+") as file:
+        writer = csv.writer(file)
+        writer.writerow(signal)
+
+def write_original_signals(signal, sampled_signal, filename):
+    with open(filename, "w+") as file:
+        writer = csv.writer(file)
+        file.write("Original:")
+        writer.writerow(signal)
+        file.write("Sampled:")
+        writer.writerow(sampled_signal)
 
 def __main__():
-    time = np.arange(0, 10, 0.1);
-    amplitude = np.sin(time)
-    plt.plot(time, amplitude)
+    MILLISAMPLE = 1000
+    output_file = "./output/delayed_signals.csv"
+    perfect_output_file = "./output/perfect_signal.csv"
+    reset_output_file(output_file)
+    sample_size = 100
+    x = range(sample_size)
+    original_signal = generate_gauss(sample_size=sample_size, magnitude=127)
+    new_signal, newX= resample(signal=original_signal, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
+    write_original_signals(original_signal, new_signal, perfect_output_file)
+    #plt.plot(x, original_signal, color="blue")
+    for delay in read_delay_file():
+        quantized_delay = int(MILLISAMPLE * round(float(delay),3))
+        delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
+        #plt.plot(x, delayed_signal, color="green")
+        write_signal(delayed_signal, output_file)
+    #plt.show()
 
-    lp = LagrangePoly(time, amplitude)
-
-    xx = np.arange(0, 10)
-
-    #plt.plot(xx, lp.basis(xx, 0))
-    #plt.plot(xx, lp.basis(xx, 1))
-    #plt.plot(xx, lp.basis(xx, 2))
-    #plt.plot(xx, lp.basis(xx, 3))
-    plt.plot(xx, lp.interpolate(xx))
-    plt.show()
-
-#if __name__ == "__main__":
-#    __main__()
+if __name__ == "__main__":
+    __main__()
