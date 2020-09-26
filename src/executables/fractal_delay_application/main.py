@@ -21,7 +21,13 @@ def resample(signal, sample_size, original_sample_size):
 
 def generate_gauss(sample_size, magnitude=127):
     seed(1)
-    return [random.gauss(0, magnitude/3) for i in range(sample_size)]
+    wave = [random.gauss(0, magnitude/3) for i in range(sample_size)]
+    for i in wave:
+        if i > 127:
+            i = 127.0
+        if i < -127:
+            i = -127.0
+    return wave
 
 def generate_impulse(duration, baseline, sample_size, amplitude=127):
     pass
