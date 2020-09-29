@@ -13,14 +13,17 @@ from scipy import signal as sig
 import matplotlib.pyplot as plt
 import csv
 import os
+import math
 
 
 def resample(signal, sample_size, original_sample_size):
+    print("Resampling")
     return sig.resample(signal, sample_size), np.linspace(0, original_sample_size, sample_size)
 
 
 def generate_gauss(sample_size, magnitude=127):
     seed(1)
+    print("Generating Signal")
     wave = [random.gauss(0, magnitude/3) for i in range(sample_size)]
     for i in wave:
         if i > 127:
@@ -30,10 +33,31 @@ def generate_gauss(sample_size, magnitude=127):
     return wave
 
 def generate_impulse(duration, baseline, sample_size, amplitude=127):
-    pass
+    impulse = sig.unit_impulse(duration + 1)
+    multiple = math.ceil(float(sample_size) / float(duration))
 
-def generate_sine(phase, frequency, baseline, sample_size, amplitude=127):
-    pass
+    i = np.array(list(impulse) * multiple)
+    i = i[:sample_size]
+    y = np.arange(len(i))
+    i = i * amplitude
+    plt.plot(y, i)
+    plt.xlabel('Time [Samples]')
+    plt.ylabel('Amplitude')
+    plt.show()
+
+def generate_sine(frequency, baseline, sample_size, amplitude=127, phase=None):
+    fs = sample_size
+    f = frequency
+    x = np.arange(fs)
+    y = amplitude * np.sin(1 * np.pi * f * (x/fs))
+
+    if phase:
+        y = apply_delay(y, phsse)
+    plt.stem(x, y, 'r')
+    plt.plot(x, y)
+    plt.show()
+    return y
+
 
 def read_delay_file(filename="delays.csv"):
     delays = []
@@ -43,6 +67,9 @@ def read_delay_file(filename="delays.csv"):
         for row in reader:
             delays = row
     return delays
+
+def delay_signal(signal, delay):
+    return signal[(999 + delay)::1000]
 
 def apply_delay(signal, delay):
     def nextpow2(i):
@@ -87,18 +114,33 @@ def __main__():
     output_file = "./output/delayed_signals.csv"
     perfect_output_file = "./output/perfect_signal.csv"
     reset_output_file(output_file)
-    sample_size = 100
-    x = range(sample_size)
-    original_signal = generate_gauss(sample_size=sample_size, magnitude=127)
-    new_signal, newX= resample(signal=original_signal, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
-    write_original_signals(original_signal, new_signal, perfect_output_file)
-    #plt.plot(x, original_signal, color="blue")
-    for delay in read_delay_file():
-        quantized_delay = int(MILLISAMPLE * round(float(delay),3))
-        delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
-        #plt.plot(x, delayed_signal, color="green")
-        write_signal(delayed_signal, output_file)
+    delays = read_delay_file()
+    #write_original_signals(original_signal, new_signal, perfect_output_file)
+    #plt.plot(x[1:-1], original_signal[1:-1], color="blue")
+    #a_delayed_signal = delay(signal=new_signal, delay=250)
+    #plt.plot(x[1:-1], a_delayed_signal[1:-1], color="red")
+    #b_delayed_signal = delay(signal=new_signal, delay=500)
+    #plt.plot(x[1:-1], b_delayed_signal[1:-1], color="orange")
+    #delayed_signal = delay_signal(signal=new_signal, delay=1000)
+    #plt.plot(x[1:-1], delayed_signal[0:-1], color="green")
+    for i in range(200):
+        print(f"Writing voltage Block {i}")
+        sample_size = (51200)+2
+        x = range(sample_size)
+        original_signal = generate_gauss(sample_size=sample_size, magnitude=127)
+        new_signal, newX= resample(signal=original_signal, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
+        for delay in delays:
+             quantized_delay = int(MILLISAMPLE * round(float(delay),3))
+             #delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
+             delayed_signal = delay_signal(signal=new_signal, delay=quantized_delay)
+             #plt.plot(x, delayed_signal, color="green")
+             if(len(delayed_signal[1:-1]) == sample_size-3):
+                write_signal(delayed_signal[1:], output_file)
+             else:
+                write_signal(delayed_signal[1:-1], output_file)
     #plt.show()
 
 if __name__ == "__main__":
-    __main__()
+     __main__()
+#     generate_sine(4, 0, 1000, amplitude=4)
+#    generate_impulse(5, 0, 100, amplitude=4)
