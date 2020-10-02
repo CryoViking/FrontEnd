@@ -32,7 +32,7 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 all: signal_generator subfile_generator
 
-signal_generator: $(OBJDIR)signal_generator.o
+signal_generator: $(OBJDIR)signal_generator.o $(OBJDIR)libs/frannor.o
 	$(CC) -o $@ $< $(OBJDIR)libs/frannor.o $(CXXFLAGS)
 
 subfile_generator: $(OBJDIR)subfile_generator.o

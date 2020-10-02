@@ -18,10 +18,6 @@
 //Local Imports
 #include "delay_generator.h"
 
-char* generateOutputFilename(){
-    return "";
-}
-
 const int NUM_TILES = 256;
 
 typedef struct {
@@ -44,8 +40,9 @@ coord** parseCoordFile(char* filename){
     while(getline(&line, &len, file)){
         if(line[0] != '#'){
             int _;
-            coord* coordinate = (coord*)malloc(sizeof(coord));
-            coordinates[++count] = sscanf(line, "T%d:%lf,%lf", &_, &(coordinate->longitude), &(coordinate->longitude));
+            coord* coordinate = (coord*)malloc(sizeof(coord)); 
+            sscanf(line, "T%d:%lf,%lf", &_, &(coordinate->longitude), &(coordinate->longitude));
+            *coordinates[++count] = *coordinate;
         }
     }
     fclose(file);
@@ -64,16 +61,18 @@ char* generateOutputFilename(){
     time_t t;
     struct tm* tm;
     char date_arr[11], time_arr[11];
-
-    //Get time
+     
     time(&t);
     tm = localtime(&t);
+     
     strftime(date_arr, sizeof(date_arr), "%Y:%m:%d", tm);
     strftime(time_arr, sizeof(time_arr), "%I:%M:%S", tm);
     //Format string
-    const char* filename;
-    strcat(filename, date_arr); strcat(filename, "-"); strcat(filename, time_arr);
-    strcat(filename, "_delays.csv");
+    char filename[27];
+    sprintf(filename, "%s", date_arr);
+    sprintf(filename, "-%s", time_arr);
+    sprintf(filename, "%s", "_delays.csv");
+    printf("%s\n", filename);
     return filename;
 }
 
@@ -99,7 +98,7 @@ bool generateRandomDelays(char* outputFilename){
 }
 
 bool generateModelledDelays(char* outputFilename, char* coordinateFile, double elevation, double azimuth){
-    coord* coordinates = parseCoordFile(coordinateFile);
+    coord** coordinates = parseCoordFile(coordinateFile);
     if(coordinates == NULL){
         return false;
     }
