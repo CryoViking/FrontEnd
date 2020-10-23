@@ -93,7 +93,7 @@ static int callback(IniDispatch *disp, void *v_other){
 }
 
 void load_confini(){
-    if (load_ini_path("../example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL)){
+    if (load_ini_path("example_configfile.csv", INI_DEFAULT_FORMAT, NULL, callback, NULL)){
         fprintf(stderr, "could not load ini file.");
     }
 }

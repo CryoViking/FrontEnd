@@ -32,11 +32,15 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 all: signal_generator subfile_generator
 
-signal_generator: $(OBJDIR)signal_generator.o
-	$(CC) -o $@ $< $(OBJDIR)libs/frannor.o $(CXXFLAGS)
+signal_generator: $(OBJDIR)signal_generator.o $(LIBDIR)frannor.o
+	$(CC) -o $@ $< $(LIBDIR)frannor.o $(CXXFLAGS)
 
 subfile_generator: $(OBJDIR)subfile_generator.o
 	$(CC) -o $@ $< $(CXXFLAGS) -lconfini
+
+
+$(LIBDIR)frannor.o: ./src/libs/frannor.c ./src/libs/frannor.h
+	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 $(OBJDIR)signal_generator.o: ./src/signal_generator.c ./src/signal_generator.h ./src/libs/frannor.c ./src/libs/frannor.h
 	$(CC) -c -o $@ $< $(CXXFLAGS)
@@ -44,8 +48,6 @@ $(OBJDIR)signal_generator.o: ./src/signal_generator.c ./src/signal_generator.h .
 $(OBJDIR)subfile_generator.o: ./src/subfile_generator.c ./src/subfile_generator.h
 	$(CC) -c -o $@ $< $(CXXFLAGS) -lconfini
 
-$(OBJDIR)libs/frannor.o: ./src/libs/frannor.c ./src/libs/frannor.h
-	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 clean:
 	$(RM) $(wildcard ./obj/*.o ./obj/libs/*.o signal_generator subfile_generator)
