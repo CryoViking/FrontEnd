@@ -1,3 +1,5 @@
+/* The subfile generator will take output of signals/noise/delay then combine them into .sub file
+    author: Phi Long Nguyen*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
