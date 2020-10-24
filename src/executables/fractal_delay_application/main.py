@@ -69,7 +69,7 @@ def read_delay_file(filename="delays.csv"):
     return delays
 
 def delay_signal(signal, delay):
-    return signal[(999 + delay)::1000]
+    return signal[(999999 + delay)::1000000]
 
 def apply_delay(signal, delay):
     def nextpow2(i):
@@ -110,7 +110,7 @@ def write_original_signals(signal, sampled_signal, filename):
         writer.writerow(sampled_signal)
 
 def __main__():
-    MILLISAMPLE = 1000
+    MILLISAMPLE = 1000000
     output_file = "./output/delayed_signals.csv"
     perfect_output_file = "./output/perfect_signal.csv"
     reset_output_file(output_file)
@@ -130,7 +130,7 @@ def __main__():
         original_signal = generate_gauss(sample_size=sample_size, magnitude=127)
         new_signal, newX= resample(signal=original_signal, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
         for delay in delays:
-             quantized_delay = int(MILLISAMPLE * round(float(delay),3))
+             quantized_delay = int(MILLISAMPLE * round(float(delay),6))
              #delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
              delayed_signal = delay_signal(signal=new_signal, delay=quantized_delay)
              #plt.plot(x, delayed_signal, color="green")
