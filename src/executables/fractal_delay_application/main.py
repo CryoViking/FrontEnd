@@ -32,6 +32,18 @@ def generate_gauss(sample_size, magnitude=127):
             i = -127.0
     return wave
 
+def generate_complex_wave(sample_size, magnitude):
+    seed(i)
+    n = 100
+    sigma = 1.0
+
+    phi = 2.0 * np.pi * np.random.random(n)
+    r   = np.random.gauss(loc=0.0, scale=sigma, size=n)
+
+    x   = r*np.cos(phi)
+    y   = r*np.sin(phi)
+    return x
+
 def generate_impulse(duration, baseline, sample_size, amplitude=127):
     impulse = sig.unit_impulse(duration + 1)
     multiple = math.ceil(float(sample_size) / float(duration))
@@ -141,6 +153,7 @@ def __main__():
     #plt.show()
 
 if __name__ == "__main__":
-     __main__()
+    print(generate_complex_wave(100))
+#      __main__()
 #     generate_sine(4, 0, 1000, amplitude=4)
 #    generate_impulse(5, 0, 100, amplitude=4)
