@@ -32,17 +32,17 @@ def generate_gauss(sample_size, magnitude=127):
             i = -127.0
     return wave
 
-def generate_complex_wave(sample_size, magnitude):
-    seed(i)
-    n = 100
+def generate_complex_wave(sample_size, magnitude=127):
+    seed(1)
+    n = sample_size
     sigma = 1.0
 
     phi = 2.0 * np.pi * np.random.random(n)
-    r   = np.random.gauss(loc=0.0, scale=sigma, size=n)
+    r   = np.random.normal(loc=0.0, scale=sigma, size=n)
 
     x   = r*np.cos(phi)
     y   = r*np.sin(phi)
-    return x
+    return x, y
 
 def generate_impulse(duration, baseline, sample_size, amplitude=127):
     impulse = sig.unit_impulse(duration + 1)
@@ -64,7 +64,7 @@ def generate_sine(frequency, baseline, sample_size, amplitude=127, phase=None):
     y = amplitude * np.sin(1 * np.pi * f * (x/fs))
 
     if phase:
-        y = apply_delay(y, phsse)
+        y = apply_delay(y, phase)
     plt.stem(x, y, 'r')
     plt.plot(x, y)
     plt.show()
@@ -139,13 +139,22 @@ def __main__():
         print(f"Writing voltage Block {i}")
         sample_size = (51200)+2
         x = range(sample_size)
-        original_signal = generate_gauss(sample_size=sample_size, magnitude=127)
-        new_signal, newX= resample(signal=original_signal, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
+        original_signal_x, original_signal_y = generate_complex_wave(sample_size=sample_size, magnitude=127)
+
+        # now interpolate the real and imaginary parts of this signal
+
+        new_signal_x, _ = resample(signal=original_signal_x, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
+        new_signal_y, _ = resample(signal=original_signal_y, sample_size=MILLISAMPLE*sample_size, original_sample_size=sample_size)
+
         for delay in delays:
              quantized_delay = int(MILLISAMPLE * round(float(delay),6))
              #delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
-             delayed_signal = delay_signal(signal=new_signal, delay=quantized_delay)
+             delayed_signal_x = delay_signal(signal=new_signal_x, delay=quantized_delay)
+             delayed_signal_y = delay_signal(signal=new_signal_y, delay=quantized_delay)
              #plt.plot(x, delayed_signal, color="green")
+
+             for x, y in zip(delayed_signal_x, delayed_signal_y):
+                c = complex(x, y)
              if(len(delayed_signal[1:-1]) == sample_size-3):
                 write_signal(delayed_signal[1:], output_file)
              else:
