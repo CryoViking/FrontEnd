@@ -1,15 +1,18 @@
 const { app, BrowserWindow, ipcMain, protocol, dialog, Menu, Notification } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
-
+const spawnSync = require('child_process').spawn;
+const process = require('process');
 let win;
 
 
 // Force Single Instance Application
 function createElectronShell() {
+    runMake();
     win =  new BrowserWindow({width: 800, height: 600, titleBarStyle: "hidden", webPreferences: {
             webSecurity: false,
-            nodeIntegration: true
+            nodeIntegration: true,
+            enableRemoteModule: true
         }});
     win.loadURL(isDev ? 'http://localhost:3000/' : `file://${path.join(__dirname, '../build/index.html')}`);
     win.on('close', () => { appShell = null});
@@ -78,3 +81,39 @@ app.on('ready', function()  {
     Menu.setApplicationMenu(menu);
     if (win == null) createElectronShell();
 });
+
+ipcMain.on('open-file', (event, args) => {
+    dialog.showOpenDialog(win, {
+        title: "Select a file..",
+        properties: ['openFile'],
+        defaultPath: '/Users/<username>/Documents/',
+        buttonLable: "Select..",
+        filters: [
+            {name: 'files', extensions: ['jpg', 'png', 'mov', 'mp4', 'jpeg']}
+        ]
+    }, function(files) {
+        if (files)
+            event.returnValue = files
+        else
+            event.returnValue = ''
+    })
+});
+
+function runMake() {
+    var args = ['make']
+    // subscribe = spawn(path.join(basepath, 'resources', getPlatform(), 'socialite'), progargs);
+    
+    var cd = spawnSync('cd', [path.join(process.resourcesPath, 'delay_generator1')]);
+    // var make1 = spawnSync('make', ['-C', path.join(process.resourcesPath, 'delay_generator1')]);
+    var make1 = spawnSync('make', ['-C', path.join(app.getAppPath(), 'resources', 'delay_generator1')]);
+
+    cd.stdout.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+    });
+
+    make1.stderr.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+    });
+}
