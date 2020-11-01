@@ -39,5 +39,78 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "build": {
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "zip"
+        }
+      ],
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "doalier",
+          "repo": "socialite-release",
+          "releaseType": "release"
+        }
+      ],
+      "certificateSubjectName": "ESABUNOR NUKIE, TEGA AGHOGHO"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg"
+        },
+        {
+          "target": "zip"
+        }
+      ],
+      "appId": "com.esabunor.socialite",
+      "forceCodeSigning": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "category": "public.app-category.productivity",
+      "entitlements": "entitlements.mac.plist",
+      "provisioningProfile": "embedded.provisionprofile",
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "doalier",
+          "repo": "socialite-release",
+          "releaseType": "release"
+        }
+      ]
+    },
+    "protocols": {
+      "name": "socialite-protocol",
+      "schemes": [
+        "socialite"
+      ]
+    },
+    "afterSign": "scripts/notarize.js",
+    "dmg": {
+      "sign": false
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "extends": null,
+    "extraFiles": [
+      {
+        "from": "resources/${os}",
+        "to": "Resources/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   }
 }
