@@ -24,7 +24,16 @@ export default class Generate extends Component {
 
             if (files.filePaths !== undefined)  {
                 console.log(files.filePaths[0]);
-                spawnSync('/delay_generator/delay_generator', ['-o', `${files.filePaths[0]}/delay.csv`, '-r']);
+                var delay = spawnSync(`${app.getAppPath()}` + 'resources/delay_generator/delay_generator', ['-o', `${files.filePaths[0]}/delay.csv`, '-r']);
+                delay.stdout.on( 'data', data => {
+                    console.log( `stdout: ${data}` );
+                    console.log(String(data));
+                });
+
+                delay.stderr.on( 'data', data => {
+                    console.log( `stdout: ${data}` );
+                    console.log(String(data));
+                });
             }
         })
     }

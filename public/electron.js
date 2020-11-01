@@ -103,15 +103,15 @@ function runMake() {
     var args = ['make']
     // subscribe = spawn(path.join(basepath, 'resources', getPlatform(), 'socialite'), progargs);
     
-    var cd = spawnSync('cd', [path.join(process.resourcesPath, 'delay_generator1')]);
+    // var cd = spawnSync('cd', [path.join(process.resourcesPath, 'delay_generator1')]);
     // var make1 = spawnSync('make', ['-C', path.join(process.resourcesPath, 'delay_generator1')]);
-    var make1 = spawnSync('make', ['-C', path.join(app.getAppPath(), 'resources', 'delay_generator1')]);
+    var make1 = spawnSync('make', ['-C', path.join(app.getAppPath(), 'resources', 'delay_generator')]);
 
-    cd.stdout.on( 'data', data => {
+    make1.stdout.on( 'data', data => {
         console.log( `stdout: ${data}` );
         console.log(String(data));
     });
-
+    
     make1.stderr.on( 'data', data => {
         console.log( `stdout: ${data}` );
         console.log(String(data));
