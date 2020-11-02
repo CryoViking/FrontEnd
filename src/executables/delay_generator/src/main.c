@@ -12,16 +12,8 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-//Library Imports
-
 //Local Imports
 #include "delay_generator.h"
-
-/*
-TODO: List
-    - Take in a single command line argument
-        - The directory of the folder to output the file to.
-*/
 
 typedef struct Arguments{
     const char* outputDir;
