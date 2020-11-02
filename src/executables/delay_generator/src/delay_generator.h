@@ -9,8 +9,7 @@
 
 #include <stdbool.h>
 
-char* generateOutputFilename();
-bool generateRandomDelays(char*);
-bool generateModelledDelays(char*, char*, double, double);
+//char* generateOutputFilename(); See definiation of this function in delay_generator.c
+bool generateRandomDelays(char*, int);
 
 #endif
