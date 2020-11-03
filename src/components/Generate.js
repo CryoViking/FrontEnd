@@ -1,66 +1,10 @@
 import React, { Component } from 'react';
 import '../Bootstrap.css';
 import '../App.css';
-const {dialog} = window.require('electron').remote;
-const spawnSync = window.require( 'child_process' ).spawnSync;
-const { getCurrentWindow, BrowserWindow, app } = window.require('electron').remote;
 
 export default class Generate extends Component {
     constructor(props) {
         super(props);
-    }
-
-    selectInputFileDir = () => {
-        var path = dialog.showOpenDialog(
-            getCurrentWindow(),
-            {
-                title: "Select were to save delay file..",
-                properties: ['openDirectory'],
-                modal: true
-            } 
-        );
-        path.then(files => {
-            var basepath = app.getAppPath();
-
-            if (files.filePaths !== undefined)  {
-                console.log(files.filePaths[0]);
-                spawnSync('/delay_generator/delay_generator', ['-o', `${files.filePaths[0]}/delay.csv`, '-r']);
-            }
-        })
-    }
-
-    selectDelayFile = () => {
-        
-        var path = dialog.showOpenDialog(
-            getCurrentWindow(),
-            {
-                title: "Select delay file..",
-                properties: ['openFile'],
-                modal: true,
-                message: "Select delay file.."
-            }
-        );
-
-        path.then(files => {
-            console.log(files.filePaths[0]);
-            
-        })
-    }
-
-
-    selectSubfileDir = () => {
-        var path = dialog.showOpenDialog(
-            getCurrentWindow(),
-            {
-                title: "Select were to save subfile...",
-                properties: ['openDirectory'],
-                modal: true
-            }
-        );
-
-        path.then(files => {
-            console.log(files.filePaths[0]);
-        })
     }
 
     render() {
@@ -154,15 +98,16 @@ export default class Generate extends Component {
                                 </div>
                                 <div className="col-sm-12 position-relative p-2">
                                     <div className="position-relative" style={{ whiteSpace: 'nowrap' }}>
-                                        <a className="btn btn-primary bg-dark text-white border-0 w-100" href="#" onClick={this.selectDelayFile}>Delay Input File</a>
+                                        <a className="btn btn-primary bg-dark text-white border-0 w-100" href="#">Delay Input File</a>
                                     </div>
                                 </div>
                                 <div className="col-sm-12 position-relative p-2">
                                     <div className="position-relative" style={{ whiteSpace: 'nowrap' }}>
-                                        <a className="btn btn-primary bg-dark text-white border-0 w-100" href="#" onClick={this.selectInputFileDir}>Generate Delay</a>
+                                        <a className="btn btn-primary bg-dark text-white border-0 w-100" id="getDelayNofy">Generate Delay</a>
                                     </div>
                                 </div>
                             </div>
+                            <div id="delayNofy">Delay Has Successfully Generated</div>
                         </div>
                     </div>
                     <div className="row mt-4">
@@ -199,10 +144,11 @@ export default class Generate extends Component {
                     <div className="row mt-4">
                         <div className="col-sm-12">
                             <div className="float-right" style={{ whiteSpace: 'nowrap' }}>
-                                <a className="btn btn-primary border-0" href="#" onClick={this.selectSubfileDir}>GENERATE</a>
+                                <a id="getSubNofy" className="btn btn-primary border-0">GENERATE</a>
                             </div>
                         </div>
                     </div>
+                    <div id="subNofy">Sub File Has Successfully Generated</div>
                 </div>
             </div>
         );
