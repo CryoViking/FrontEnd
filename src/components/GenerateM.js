@@ -172,7 +172,9 @@ class Generate extends React.Component {
                     frequency: this.frequencyRef.current.value,
                     baseline: this.baselineRef.current.value,
                     phase: this.phaseRef.current.value,
-                    numberOfTiles: this.numberOfTilesRef.current.value
+                    numberOfTiles: this.numberOfTilesRef.current.value,
+
+                    duration: this.durationRef.current.value
                 }
                 ipcRenderer.send('generate-subfile', args);
             }
@@ -218,13 +220,13 @@ class Generate extends React.Component {
                                 </FormControl>
                             </div>
                             <div className={classes.column}>
-                                { this.state.waveType == "impulse" && <>
+                                { this.state.waveType === "impulse" && <>
                                     <TextField id="standard-basic" type="number" label="Duration" ref={this.durationRef}/>
                                     <br />
                                     <TextField id="standard-basic" type="number" label="Baseline" ref={this.baselineRef}/>
                                     <br />
                                 </>}
-                                { this.state.waveType == "sinusoidal" && <>
+                                { this.state.waveType === "sinusoidal" && <>
                                     <TextField id="standard-basic" type="number" label="Frequency" ref={this.frequencyRef} />
                                     <br />
                                     <TextField id="standard-basic" type="number" label="Baseline" ref={this.baselineRef}/>
