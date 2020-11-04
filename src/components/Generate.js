@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import '../Bootstrap.css';
 import '../App.css';
-const {dialog} = window.require('electron').remote;
+const {ipcRenderer} = window.require('electron');
 const spawnSync = window.require( 'child_process' ).spawnSync;
-const { getCurrentWindow, BrowserWindow, app } = window.require('electron').remote;
+const { getCurrentWindow, BrowserWindow, app, dialog } = window.require('electron').remote;
 
 export default class Generate extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            delayFile: null
+        }
     }
 
     selectInputFileDir = () => {
@@ -24,16 +28,7 @@ export default class Generate extends Component {
 
             if (files.filePaths !== undefined)  {
                 console.log(files.filePaths[0]);
-                var delay = spawnSync(`${app.getAppPath()}` + 'resources/delay_generator/delay_generator', ['-o', `${files.filePaths[0]}/delay.csv`, '-r']);
-                delay.stdout.on( 'data', data => {
-                    console.log( `stdout: ${data}` );
-                    console.log(String(data));
-                });
-
-                delay.stderr.on( 'data', data => {
-                    console.log( `stdout: ${data}` );
-                    console.log(String(data));
-                });
+                ipcRenderer.send('generate-delay', files.filePaths[0]);
             }
         })
     }
@@ -52,7 +47,7 @@ export default class Generate extends Component {
 
         path.then(files => {
             console.log(files.filePaths[0]);
-            
+            this.setState({delayFile: files.filePaths[0]});
         })
     }
 
