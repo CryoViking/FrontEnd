@@ -38,14 +38,24 @@ def generate_gauss(sample_size, magnitude=127):
 
 def generate_complex_wave(sample_size, magnitude=127):
     seed(1)
-    n = sample_size
-    sigma = 1.0
 
-    phi = 2.0 * np.pi * np.random.random(n)
-    r = np.random.normal(loc=0.0, scale=sigma, size=n)
+    phi = 2.0 * np.pi * np.random.random(sample_size)
+    r = np.random.normal(loc=0.0, scale=magnitude / 3, size=sample_size)
 
     x = r * np.cos(phi)
     y = r * np.sin(phi)
+    return x, y
+
+
+def generate_complex_noise(sample_size, snr=1, magnitude=127):
+    seed(1)
+
+    phi = 2.0 * np.pi * np.random.random(sample_size)
+    r = np.random.normal(loc=0.0, scale=snr * (magnitude / 3), size=sample_size)
+
+    x = r * np.cos(phi)
+    y = r * np.sin(phi)
+
     return x, y
 
 
@@ -61,6 +71,7 @@ def generate_impulse(duration, baseline, sample_size, amplitude=127):
     # plt.xlabel('Time [Samples]')
     # plt.ylabel('Amplitude')
     # plt.show()
+    return y, i
 
 
 def generate_sine(frequency, baseline, sample_size, amplitude=127, phase=None):
@@ -71,10 +82,10 @@ def generate_sine(frequency, baseline, sample_size, amplitude=127, phase=None):
 
     if phase:
         y = apply_delay(y, phase)
-    # plt.stem(x, y, 'r')
-    # plt.plot(x, y)
-    # plt.show()
-    return y
+#     plt.stem(x, y, 'r')
+#     plt.plot(x, y)
+#     plt.show()
+    return x, y
 
 
 def read_delay_file(filename="delays.csv"):
@@ -141,10 +152,23 @@ def __main__():
 
     # optional arguments of for the subfile generator
     parser.add_argument('--delay_file', nargs='?', type=str, help='specify delay file to be used')
+    parser.add_argument('--wave_type', nargs='?', type=str, help='wave form - sinusoidal | impulse | gaussian ')
     parser.add_argument('--subfile_output_dir', nargs='?', type=str, help='set the subfile output dir/otherwise use current dir')
     parser.add_argument('--number_of_tiles', nargs='?', type=int, help='set the num of tiles')
+    parser.add_argument('--snr', nargs='?', type=int, help='signal to noise ratio')
     parser.add_argument('--number_of_millisamples', nargs='?', type=str, help='for more accurate interpolation set to higher value')
     parser.add_argument('--header_file', type=str, help='header file')
+
+    # optional arguments for sine wave
+    parser.add_argument('--frequency', nargs='?', type=int, help='frequency of sine wave')
+    parser.add_argument('--phase', nargs='?', type=int, help='phase to apply to sine wave')
+    parser.add_argument('--amplification', nargs='?', type=int, help='sine wave amplification')
+
+    #optional arguments for impulse wave
+    parser.add_argument('--duration', nargs='?', type=int, help='duration of impulse wave')
+
+    # shared optional arguments for both
+    parser.add_argument('--baseline', nargs='?', type=int, help='baseline to apply to sine and impulse wave')
 
     namespace = parser.parse_args(sys.argv[1:])
 
@@ -156,6 +180,9 @@ def __main__():
     perfect_output_file = "./output/perfect_signal.csv"
     # reset_output_file(output_file)
 
+    """
+    General parameters for subfile generation
+    """
     if namespace.delay_file:
         delays = read_delay_file(filename=namespace.delay_file)
     else:
@@ -170,6 +197,40 @@ def __main__():
         numTiles = namespace.number_of_tiles
     else:
         numTiles = 256
+
+    """
+    Noise parameter: snr - signal to noise ratio
+    """
+    if namespace.snr:
+        snr = namespace.snr
+    else:
+        snr = 1
+
+    """
+    Sine wave type specific parameters
+    """
+    if namespace.frequency:
+        frequency = namespace.frequency
+    else:
+        frequency = 4
+
+    if namespace.baseline:
+        baseline = namespace.baseline
+    else:
+        baseline = namespace.baseline
+
+    if namespace.phase:
+        phase = namespace.phase
+    else:
+        phase = None
+
+    """
+    Impulse wave type specific parameters
+    """
+    if namespace.duration:
+        duration = namespace.duration
+    else:
+        duration = 5
 
     # write_original_signals(original_signal, new_signal, perfect_output_file)
     # plt.plot(x[1:-1], original_signal[1:-1], color="blue")
@@ -195,8 +256,17 @@ def __main__():
                 print(f"Writing voltage Block: {i} Tile: {j}", flush=True)
                 sample_size = (51200) + 2
                 x = range(sample_size)
-                original_signal_x, original_signal_y = generate_complex_wave(sample_size=sample_size, magnitude=127)
 
+                if namespace.wave_type == "gaussian":
+                    original_signal_x, original_signal_y = generate_complex_wave(sample_size=sample_size, magnitude=127)
+                elif namespace.wave_type == "sinusoidal":
+                    original_signal_x, original_signal_y = generate_sine(frequency, baseline, sample_size, amplitude=amplitude, phase=phase)
+                elif namespace.wave_type == "impulse":
+                    original_signal_x, original_signal_y = generate_impulse(duration, baseline, sample_size, amplitude=127)
+                else:
+                    exit(1)
+
+                noise_x, noise_y = generate_complex_noise(sample_size=sample_size, snr=snr)
                 # now interpolate the real and imaginary parts of this signal
 
                 new_signal_x, _ = resample(signal=original_signal_x, sample_size=MILLISAMPLE * sample_size,
@@ -211,9 +281,12 @@ def __main__():
                     delayed_signal_y = delay_signal(signal=new_signal_y, delay=quantized_delay)
                     # plt.plot(x, delayed_signal, color="green")
 
-                    for x, y in zip(delayed_signal_x, delayed_signal_y):
+                    for x, y, noisex, noisey in zip(delayed_signal_x, delayed_signal_y, noise_x, noise_y):
                         c = complex(x, y)
-                        s = struct.pack('bb', int(c.real), int(c.imag))
+                        c_noise = complex(noisex, noisey)
+
+                        c_plus_noise = c + c_noise
+                        s = struct.pack('bb', int(c_plus_noise.real), int(c_plus_noise.imag))
                         subfile.write(s)
 
         # plt.show()
