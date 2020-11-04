@@ -117,3 +117,33 @@ function runMake() {
         console.log(String(data));
     });
 }
+
+ipcMain.on('generate-delay', function (event, args) {
+    var delay = spawnSync(`${app.getAppPath()}` + '/resources/delay_generator/build/delay_generator', ['-o', `${args}/delay.csv`, '-r'], { stdio: 'pipe' });
+    delay.stdout.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+        win.webContents.send('snackbar-message', String(data));
+    });
+
+    delay.stderr.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+        win.webContents.send('snackbar-message', String(data));
+    });
+})
+
+ipcMain.on('generate-subfile', function (event, args) {
+    var main = spawnSync(`${app.getAppPath()}` + '/resources/main', ['--header_file', `${app.getAppPath()}` + '/resources/header.txt', '--subfile_output_dir', `${args[0]}`, '--delay_file', `${args[1]}`, '--number_of_tiles', '1'], { stdio: 'pipe' });
+    main.stdout.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+        win.webContents.send('snackbar-message', String(data));
+    });
+
+    main.stderr.on( 'data', data => {
+        console.log( `stdout: ${data}` );
+        console.log(String(data));
+        win.webContents.send('snackbar-message', String(data));
+    });
+})
