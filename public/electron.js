@@ -134,7 +134,40 @@ ipcMain.on('generate-delay', function (event, args) {
 })
 
 ipcMain.on('generate-subfile', function (event, args) {
-    var main = spawnSync(`${app.getAppPath()}` + '/resources/main', ['--header_file', `${app.getAppPath()}` + '/resources/header.txt', '--subfile_output_dir', `${args[0]}`, '--delay_file', `${args[1]}`, '--number_of_tiles', '1'], { stdio: 'pipe' });
+    /**
+     * var args = {
+                    subfileDir: files.filePaths[0],
+                    delayFile: this.state.delayFile,
+                    waveForm: this.state.waveType,
+
+                    noiseMagnitude: this.noiseMagnitudeRef.current.value,
+                    snr: this.snrRef.current.value,
+                    frequency: this.frequencyRef.current.value,
+                    baseline: this.baselineRef.current.value,
+                    phase: this.phaseRef.current.value,
+                    numberOfTiles: this.numberOfTilesRef.current.value
+                }
+     */
+    var parameters =  ['--header_file', `${app.getAppPath()}` + '/resources/header.txt', '--subfile_output_dir', `${args.subfileDir}`, '--delay_file', `${args.delayFile}`, '--wave_type', `${args.waveForm}`, '--number_of_tiles', `${args.numberOfTiles}`]
+
+    var snr =  args.snr !== null ? args.snr : 1 ;
+
+    parameters.push('--snr', snr);
+
+
+    switch (args.waveForm) {
+        case "sinusoidal":
+            parameters.push('--phase', args.phase, '--frequency', args.frequency, '--baseline', args.baseline)
+            break;
+        case "impulse":
+            parameters.push('--baseline', args.baseline, '--duration', args.duration);
+            break;
+        case "gaussian":
+            break;
+        default:
+            break;
+    }
+    var main = spawnSync(`${app.getAppPath()}` + '/resources/main', parameters, { stdio: 'pipe' });
     main.stdout.on( 'data', data => {
         console.log( `stdout: ${data}` );
         console.log(String(data));
