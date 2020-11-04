@@ -164,7 +164,7 @@ def __main__():
     parser.add_argument('--phase', nargs='?', type=int, help='phase to apply to sine wave')
     parser.add_argument('--amplification', nargs='?', type=int, help='sine wave amplification')
 
-    #optional arguments for impulse wave
+    # optional arguments for impulse wave
     parser.add_argument('--duration', nargs='?', type=int, help='duration of impulse wave')
 
     # shared optional arguments for both
@@ -260,7 +260,7 @@ def __main__():
                 if namespace.wave_type == "gaussian":
                     original_signal_x, original_signal_y = generate_complex_wave(sample_size=sample_size, magnitude=127)
                 elif namespace.wave_type == "sinusoidal":
-                    original_signal_x, original_signal_y = generate_sine(frequency, baseline, sample_size, amplitude=amplitude, phase=phase)
+                    original_signal_x, original_signal_y = generate_sine(frequency, baseline, sample_size, amplitude=127, phase=phase)
                 elif namespace.wave_type == "impulse":
                     original_signal_x, original_signal_y = generate_impulse(duration, baseline, sample_size, amplitude=127)
                 else:
