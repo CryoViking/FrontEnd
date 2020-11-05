@@ -33,11 +33,17 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 all: $(BLDDIR)delay_generator
 
-$(BLDDIR)delay_generator:$(OBJDIR)delay_generator.o 
+$(BLDDIR)delay_generator: $(OBJDIR)delay_generator.o $(BLDDIR) $(OBJDIR)
 	$(CC) -o $@ ./src/main.c $< $(CXXFLAGS)
 
-$(OBJDIR)delay_generator.o: ./src/delay_generator.c ./src/delay_generator.h
+$(OBJDIR)delay_generator.o: ./src/delay_generator.c ./src/delay_generator.h $(BLDDIR) $(OBJDIR)
 	$(CC) -c -o $@ $< $(CXXFLAGS)
+
+$(OBJDIR):
+	mkdir $@
+
+$(BLDDIR):
+	mkdir $@
 
 clean:
 	$(RM) $(wildcard ./obj/*.o ./obj/libs/*.o ./build/*)
