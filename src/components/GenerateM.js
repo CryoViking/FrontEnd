@@ -96,8 +96,16 @@ class Generate extends React.Component {
         this.phaseRef = React.createRef();
         // impulse wave parameters
         this.durationRef = React.createRef();
+        this.millisamplesRef = React.createRef();
 
+    }
 
+    componentDidMount() {
+        const {enqueueSnackbar} = this.props;
+
+        ipcRenderer.on('snackbar-message', function (event, args) {
+            enqueueSnackbar(args);
+        })
     }
 
     selectInputFileDir = () => {
@@ -162,20 +170,24 @@ class Generate extends React.Component {
                     return;
                 }
 
+                console.log(this.numberOfTilesRef.current.value);
+
                 var args = {
                     subfileDir: files.filePaths[0],
                     delayFile: this.state.delayFile,
                     waveForm: this.state.waveType,
 
-                    noiseMagnitude: this.noiseMagnitudeRef.current.value,
-                    snr: this.snrRef.current.value,
-                    frequency: this.frequencyRef.current.value,
-                    baseline: this.baselineRef.current.value,
-                    phase: this.phaseRef.current.value,
-                    numberOfTiles: this.numberOfTilesRef.current.value,
+                    noiseMagnitude: this.noiseMagnitudeRef.current !== null ? parseInt(this.noiseMagnitudeRef.current.value) : null,
+                    snr: this.snrRef.current !== null ? parseInt(this.snrRef.current.value) : null,
+                    frequency: this.frequencyRef.current !== null ? parseInt(this.frequencyRef.current.value) : null,
+                    baseline: this.baselineRef.current !== null ? parseInt(this.baselineRef.current.value) : null,
+                    phase: this.phaseRef.current !== null ? parseInt(this.phaseRef.current.value) : null,
+                    numberOfTiles: this.numberOfTilesRef.current ? parseInt(this.numberOfTilesRef.current.value) : null,
 
-                    duration: this.durationRef.current.value
+                    duration: this.durationRef.current !== null ? parseInt(this.durationRef.current.value) : null,
+                    numberOfMillisamples: this.millisamplesRef.current !== null ? parseInt(this.millisamplesRef.current.value) : null
                 }
+                this.props.enqueueSnackbar('Generating Subfile');
                 ipcRenderer.send('generate-subfile', args);
             }
         })
@@ -185,9 +197,6 @@ class Generate extends React.Component {
         const {classes, enqueueSnackbar} = this.props;
         console.log(this.props)
 
-        ipcRenderer.on('snackbar-message', function (event, args) { 
-            enqueueSnackbar(args);
-        })
 
         return (
             <>
@@ -221,17 +230,17 @@ class Generate extends React.Component {
                             </div>
                             <div className={classes.column}>
                                 { this.state.waveType === "impulse" && <>
-                                    <TextField id="standard-basic" type="number" label="Duration" ref={this.durationRef}/>
+                                    <TextField type="number" label="Duration" inputRef={this.durationRef}/>
                                     <br />
-                                    <TextField id="standard-basic" type="number" label="Baseline" ref={this.baselineRef}/>
+                                    <TextField type="number" label="Baseline" inputRef={this.baselineRef}/>
                                     <br />
                                 </>}
                                 { this.state.waveType === "sinusoidal" && <>
-                                    <TextField id="standard-basic" type="number" label="Frequency" ref={this.frequencyRef} />
+                                    <TextField type="number" label="Frequency" inputRef={this.frequencyRef} />
                                     <br />
-                                    <TextField id="standard-basic" type="number" label="Baseline" ref={this.baselineRef}/>
+                                    <TextField type="number" label="Baseline" inputRef={this.baselineRef}/>
                                     <br />
-                                    <TextField id="standard-basic" type="number" label="Phase" ref={this.phaseRef}/>
+                                    <TextField type="number" label="Phase" inputRef={this.phaseRef}/>
                                     <br />
                                 </>}
 
@@ -251,11 +260,6 @@ class Generate extends React.Component {
                             </div>
                         </AccordionDetails>
                         <Divider />
-                        <AccordionActions>
-                            <Button size="small" color="primary">
-                                Reset
-                            </Button>
-                        </AccordionActions>
                     </Accordion>
                     <Accordion defaultExpanded>
                         <AccordionSummary
@@ -269,19 +273,15 @@ class Generate extends React.Component {
                         </AccordionSummary>
                         <AccordionDetails className={classes.details}>
                             <div className={classes.column}>
-                                <TextField id="standard-basic" type="number" label="Noise Magnitude" ref={this.noiseMagnitudeRef}/>
+                                <TextField type="number" label="Noise Magnitude" inputRef={this.noiseMagnitudeRef}/>
                                 <br />
-                                <TextField id="standard-basic" type="number" label="S/N Ratio" ref={this.snrRef} />
-                                <br />
-                                <TextField id="standard-basic" type="number" label="Blocks per subfile" />
+                                <TextField type="number" label="S/N Ratio" inputRef={this.snrRef} />
                                 <br />
                             </div>
                             <div className={classes.columnLong}>
-                                <TextField id="standard-basic" type="number" label="Time sample per block" />
+                                <TextField label="Number of Tiles" type="number" inputRef={this.numberOfTilesRef}/>
                                 <br />
-                                <TextField id="standard-basic" type="number" label="Number of signal path" />
-                                <br />
-                                <TextField id="standard-basic" label="Number of Tiles" type="number" ref={this.numberOfTilesRef}/>
+                                <TextField type="number" label="Millisamples" inputRef={this.millisamplesRef}/>
                                 <br />
                             </div>
                         </AccordionDetails>

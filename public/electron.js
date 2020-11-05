@@ -134,6 +134,7 @@ ipcMain.on('generate-delay', function (event, args) {
 })
 
 ipcMain.on('generate-subfile', function (event, args) {
+    console.log(args);
     /**
      * var args = {
                     subfileDir: files.filePaths[0],
@@ -148,12 +149,13 @@ ipcMain.on('generate-subfile', function (event, args) {
                     numberOfTiles: this.numberOfTilesRef.current.value
                 }
      */
-    var parameters =  ['--header_file', `${app.getAppPath()}` + '/resources/header.txt', '--subfile_output_dir', `${args.subfileDir}`, '--delay_file', `${args.delayFile}`, '--wave_type', `${args.waveForm}`, '--number_of_tiles', `${args.numberOfTiles}`]
+    var parameters =  ['--header_file', `${app.getAppPath()}` + '/resources/header.txt', '--subfile_output_dir', `${args.subfileDir}`, '--delay_file', `${args.delayFile}`, '--wave_type', `${args.waveForm}`, '--number_of_tiles', args.numberOfTiles]
 
     var snr =  args.snr !== null ? args.snr : 1 ;
 
     parameters.push('--snr', snr);
 
+    parameters.push('--number_of_millisamples', args.numberOfMillisamples);
 
     switch (args.waveForm) {
         case "sinusoidal":
@@ -167,6 +169,8 @@ ipcMain.on('generate-subfile', function (event, args) {
         default:
             break;
     }
+
+    console.log(parameters);
     var main = spawnSync(`${app.getAppPath()}` + '/resources/main', parameters, { stdio: 'pipe' });
     main.stdout.on( 'data', data => {
         console.log( `stdout: ${data}` );
