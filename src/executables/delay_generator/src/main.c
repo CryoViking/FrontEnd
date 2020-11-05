@@ -41,6 +41,7 @@ struct Arguments parseArgs(int argc, char* argv[]){
 }
 
 int main(int argc, char *argv[]){
+    printf("Generating Delay File\n");
     struct Arguments args = parseArgs(argc, argv);
     if(args.outputDir == NULL){
         exit(1);
