@@ -196,7 +196,7 @@ def __main__():
     if namespace.number_of_tiles:
         numTiles = namespace.number_of_tiles
     else:
-        numTiles = 256
+        numTiles = 128
 
     """
     Noise parameter: snr - signal to noise ratio
@@ -251,7 +251,7 @@ def __main__():
         subfile.write(header)
 
         for i in range(200):
-            for j in range(numTiles):
+            for j in range(numTiles * 2):
 
                 print(f"Writing voltage Block: {i} Tile: {j}", flush=True)
                 sample_size = (51200) + 2
@@ -269,13 +269,13 @@ def __main__():
                 noise_x, noise_y = generate_complex_noise(sample_size=sample_size, snr=snr)
                 # now interpolate the real and imaginary parts of this signal
 
-                new_signal_x, _ = resample(signal=original_signal_x, sample_size=MILLISAMPLE * sample_size,
+                new_signal_x, _ = resample(signal=original_signal_x, sample_size=int(MILLISAMPLE) * sample_size,
                                            original_sample_size=sample_size)
-                new_signal_y, _ = resample(signal=original_signal_y, sample_size=MILLISAMPLE * sample_size,
+                new_signal_y, _ = resample(signal=original_signal_y, sample_size=int(MILLISAMPLE) * sample_size,
                                            original_sample_size=sample_size)
 
                 for delay in delays:
-                    quantized_delay = int(MILLISAMPLE * round(float(delay), 6))
+                    quantized_delay = int(int(MILLISAMPLE) * round(float(delay), 6))
                     # delayed_signal = splice_signal(signal=apply_delay(signal=new_signal, delay=quantized_delay), step=MILLISAMPLE)
                     delayed_signal_x = delay_signal(signal=new_signal_x, delay=quantized_delay)
                     delayed_signal_y = delay_signal(signal=new_signal_y, delay=quantized_delay)
