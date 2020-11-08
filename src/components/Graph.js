@@ -30,8 +30,8 @@ export default class Graph extends Component {
                                                     <p>Imperfect Signal</p> <span style={{ width: '100px', position: 'absolute', height: '1px', backgroundColor: 'blue', left: '150px', bottom: '35%' }} />
                                                 </div>
                                                 <div className="position-relative">
-                                                    <button onclick="merge()" className="btn btn-primary bg-white text-dark border-dark mr-2" style={{ fontSize: '18px', fontWeight: 'bold', width: '120px' }}>Merge</button>
-                                                    <button onclick="unmerge()" className="btn btn-primary bg-white text-dark border-dark ml-2" style={{ fontSize: '18px', fontWeight: 'bold', width: '120px' }}>Unmerge</button>
+                                                    <button id="merge" className="btn btn-primary bg-white text-dark border-dark mr-2" style={{ fontSize: '18px', fontWeight: 'bold', width: '120px' }}>Merge</button>
+                                                    <button id="unmerge" className="btn btn-primary bg-white text-dark border-dark ml-2" style={{ fontSize: '18px', fontWeight: 'bold', width: '120px' }}>Unmerge</button>
                                                 </div>
                                             </div>
                                             <div className="d-flex justify-content-between">
